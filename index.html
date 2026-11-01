@@ -1,0 +1,802 @@
+<!doctype html>
+<html lang="pt-PT">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Casamento – Convidados e Mesas</title>
+<style>
+  :root {
+    --bg: #faf6f1;
+    --card: #ffffff;
+    --ink: #2f2a28;
+    --muted: #7a706b;
+    --line: #e8dfd6;
+    --accent: #9c6b55;
+    --accent-ink: #ffffff;
+    --danger: #b3382c;
+    --ok: #4d7a5a;
+    --radius: 12px;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--ink);
+    font: 15px/1.45 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  }
+  header {
+    background: var(--card);
+    border-bottom: 1px solid var(--line);
+    padding: 16px 20px 0;
+  }
+  .top { display: flex; flex-wrap: wrap; gap: 12px 24px; align-items: center; justify-content: space-between; }
+  h1 { font: 600 22px/1.2 Georgia, "Times New Roman", serif; margin: 0; color: var(--accent); }
+  .stats { display: flex; gap: 8px; flex-wrap: wrap; }
+  .stat { background: var(--bg); border: 1px solid var(--line); border-radius: 999px; padding: 3px 12px; font-size: 13px; color: var(--muted); }
+  .stat b { color: var(--ink); }
+  nav { display: flex; gap: 4px; margin-top: 12px; }
+  nav button {
+    border: 0; background: none; padding: 10px 16px; font: inherit; cursor: pointer; color: var(--muted);
+    border-bottom: 3px solid transparent;
+  }
+  nav button[aria-selected="true"] { color: var(--accent); border-bottom-color: var(--accent); font-weight: 600; }
+  main { padding: 20px; max-width: 1400px; margin: 0 auto; }
+  section[hidden] { display: none; }
+
+  .card { background: var(--card); border: 1px solid var(--line); border-radius: var(--radius); padding: 16px; }
+  form.row { display: flex; flex-wrap: wrap; gap: 10px; align-items: end; }
+  label { display: flex; flex-direction: column; gap: 4px; font-size: 13px; color: var(--muted); }
+  input, select, textarea {
+    font: inherit; color: var(--ink); padding: 8px 10px; border: 1px solid var(--line); border-radius: 8px; background: #fff;
+  }
+  input:focus, select:focus, textarea:focus { outline: 2px solid var(--accent); outline-offset: 0; }
+  button.btn {
+    font: inherit; padding: 8px 16px; border-radius: 8px; border: 1px solid var(--accent);
+    background: var(--accent); color: var(--accent-ink); cursor: pointer;
+  }
+  button.btn.ghost { background: transparent; color: var(--accent); }
+  button.btn:hover { filter: brightness(1.08); }
+  button.icon {
+    border: 0; background: none; cursor: pointer; color: var(--muted); font-size: 16px; padding: 2px 8px; border-radius: 6px;
+  }
+  button.icon:hover { color: var(--danger); background: #fbeceb; }
+  details { margin-top: 12px; }
+  summary { cursor: pointer; color: var(--accent); font-size: 14px; }
+  details textarea { width: 100%; min-height: 110px; margin: 8px 0; }
+
+  .toolbar { display: flex; gap: 10px; align-items: center; margin: 18px 0 10px; flex-wrap: wrap; }
+  .toolbar input[type=search] { flex: 1; min-width: 200px; }
+  .empty { color: var(--muted); text-align: center; padding: 28px 8px; }
+
+  ul.list { list-style: none; margin: 0; padding: 0; }
+  ul.list li { display: flex; align-items: center; gap: 10px; padding: 8px 4px; border-bottom: 1px solid var(--line); }
+  ul.list li:last-child { border-bottom: 0; }
+  .dot { width: 10px; height: 10px; border-radius: 50%; background: var(--bd, #aaa); flex: none; }
+  .gname { flex: 1; min-width: 0; overflow-wrap: anywhere; }
+  .tag { font-size: 12px; color: var(--muted); background: var(--bg); border-radius: 999px; padding: 1px 10px; white-space: nowrap; }
+  li select { max-width: 190px; padding: 5px 8px; font-size: 13px; }
+
+  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 14px; margin-top: 18px; }
+  .tcard header { background: none; border: 0; padding: 0 0 8px; display: flex; align-items: center; gap: 8px; }
+  .tcard h3 { margin: 0; flex: 1; font-size: 16px; }
+  .cap { font-size: 13px; color: var(--muted); }
+  .cap.full { color: var(--ok); font-weight: 600; }
+  .seatsin { width: 64px; padding: 3px 6px; font-size: 13px; }
+  .tcard select { width: 100%; margin-top: 10px; }
+
+  /* sala */
+  .roomwrap { display: grid; grid-template-columns: 270px 1fr; gap: 16px; align-items: start; }
+  aside .card { margin-bottom: 14px; }
+  aside h3 { margin: 0 0 8px; font-size: 14px; color: var(--muted); text-transform: uppercase; letter-spacing: .04em; }
+  #unassignedDrop.over, .rt.over .tbody { outline: 3px dashed var(--accent); outline-offset: 2px; }
+  #unassignedList li { cursor: grab; padding: 5px 4px; font-size: 14px; }
+  .legend { display: flex; flex-wrap: wrap; gap: 6px 12px; font-size: 12px; color: var(--muted); }
+  .legend span { display: inline-flex; align-items: center; gap: 5px; }
+  .roomscroll { overflow: auto; border: 1px solid var(--line); border-radius: var(--radius); background: #fff; }
+  #room {
+    position: relative; min-width: 100%; min-height: 560px;
+    background-image: radial-gradient(var(--line) 1px, transparent 1px);
+    background-size: 24px 24px;
+  }
+  .rt { position: absolute; cursor: grab; touch-action: none; user-select: none; }
+  .rt.dragging { cursor: grabbing; z-index: 5; }
+  .rt.sel .tbody { box-shadow: 0 0 0 3px var(--accent); }
+  .tbody {
+    position: absolute; background: #fdf3ea; border: 2px solid #d9bfa9;
+    display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center;
+    line-height: 1.2; padding: 4px; overflow: hidden;
+  }
+  .tbody.round { border-radius: 50%; }
+  .tbody.rect { border-radius: 10px; }
+  .tbody b { font-size: 13px; }
+  .tbody small { color: var(--muted); font-size: 11px; }
+  .seat {
+    position: absolute; width: 28px; height: 28px; border-radius: 50%;
+    border: 2px dashed #ccc; background: #fafafa; font-size: 10px; font-weight: 600;
+    display: flex; align-items: center; justify-content: center; color: #444;
+  }
+  .seat.filled { border: 2px solid var(--bd); background: var(--bg-c); cursor: grab; }
+  .hint { font-size: 12px; color: var(--muted); margin: 8px 2px 0; }
+  .detail li { padding: 4px 0; font-size: 14px; }
+
+  .sync { font: inherit; font-size: 13px; cursor: pointer; }
+  .sync.ok { color: var(--ok); border-color: var(--ok); }
+  .sync.err { color: var(--danger); border-color: var(--danger); }
+  dialog { border: 1px solid var(--line); border-radius: var(--radius); padding: 20px; max-width: 460px; width: calc(100% - 32px); color: var(--ink); }
+  dialog::backdrop { background: rgba(0, 0, 0, .35); }
+  dialog h2 { margin: 0 0 8px; font: 600 18px Georgia, serif; color: var(--accent); }
+  dialog label { margin-top: 10px; }
+  dialog .actions { display: flex; gap: 8px; margin-top: 16px; justify-content: flex-end; flex-wrap: wrap; }
+  dialog p { font-size: 13px; color: var(--muted); margin: 6px 0; }
+  #syncMsg { color: var(--danger); min-height: 1.2em; }
+
+  @media (max-width: 800px) {
+    .roomwrap { grid-template-columns: 1fr; }
+    main { padding: 12px; }
+  }
+  @media print {
+    header nav, form, .toolbar, button, select, aside { display: none !important; }
+  }
+</style>
+</head>
+<body>
+<header>
+  <div class="top">
+    <h1>💍 Casamento – Convidados e Mesas</h1>
+    <div class="stats" id="stats"></div>
+    <button class="stat sync" id="sync" data-action="settings" title="Sincronização com o GitHub"></button>
+  </div>
+  <nav role="tablist">
+    <button role="tab" data-action="tab" data-id="guests" aria-selected="true">Convidados</button>
+    <button role="tab" data-action="tab" data-id="tables" aria-selected="false">Mesas</button>
+    <button role="tab" data-action="tab" data-id="room" aria-selected="false">Sala</button>
+  </nav>
+</header>
+
+<main>
+  <!-- CONVIDADOS -->
+  <section id="tab-guests">
+    <div class="card">
+      <form class="row" id="guestForm">
+        <label>Nome
+          <input name="name" required placeholder="Ex.: Maria Silva" autocomplete="off">
+        </label>
+        <label>Grupo
+          <input name="group" list="groups" placeholder="Ex.: Família da noiva" autocomplete="off">
+          <datalist id="groups"></datalist>
+        </label>
+        <button class="btn" type="submit">Adicionar</button>
+      </form>
+      <details>
+        <summary>Adicionar vários de uma vez</summary>
+        <form id="bulkForm">
+          <textarea name="names" placeholder="Um nome por linha"></textarea>
+          <label>Grupo (para todos)
+            <input name="group" list="groups" placeholder="Opcional" autocomplete="off">
+          </label>
+          <p><button class="btn" type="submit">Adicionar todos</button></p>
+        </form>
+      </details>
+    </div>
+
+    <div class="toolbar">
+      <input type="search" id="search" placeholder="Pesquisar por nome ou grupo…" aria-label="Pesquisar convidados">
+      <button class="btn ghost" data-action="export">Exportar</button>
+      <button class="btn ghost" data-action="import">Importar</button>
+      <input type="file" id="importFile" accept="application/json" hidden>
+    </div>
+    <div class="card"><ul class="list" id="guestList"></ul></div>
+  </section>
+
+  <!-- MESAS -->
+  <section id="tab-tables" hidden>
+    <div class="card">
+      <form class="row" id="tableForm">
+        <label>Nome da mesa
+          <input name="name" placeholder="Ex.: Mesa 1" autocomplete="off">
+        </label>
+        <label>Lugares
+          <input name="seats" type="number" min="1" max="40" value="8" required style="width:90px">
+        </label>
+        <label>Forma
+          <select name="shape">
+            <option value="round">Redonda</option>
+            <option value="rect">Retangular</option>
+          </select>
+        </label>
+        <button class="btn" type="submit">Adicionar mesa</button>
+      </form>
+    </div>
+    <div class="grid" id="tableGrid"></div>
+  </section>
+
+  <!-- SALA -->
+  <section id="tab-room" hidden>
+    <div class="roomwrap">
+      <aside>
+        <div class="card" id="unassignedDrop">
+          <h3>Sem mesa (<span id="unCount">0</span>)</h3>
+          <ul class="list" id="unassignedList"></ul>
+        </div>
+        <div class="card detail" id="detail" hidden></div>
+        <div class="card">
+          <h3>Grupos</h3>
+          <div class="legend" id="legend"></div>
+        </div>
+        <button class="btn ghost" data-action="autoLayout" style="width:100%">Arrumar mesas em grelha</button>
+      </aside>
+      <div>
+        <div class="roomscroll"><div id="room"></div></div>
+        <p class="hint">Arraste as mesas para as posicionar. Arraste um convidado da lista para uma mesa para o sentar; arraste um lugar ocupado para a lista para o retirar. Clique numa mesa para ver os detalhes.</p>
+      </div>
+    </div>
+  </section>
+</main>
+
+<dialog id="syncDialog">
+  <form id="syncForm" method="dialog">
+    <h2>Sincronizar com o GitHub</h2>
+    <p>Os convidados ficam guardados num repositório privado do GitHub, para os ver em qualquer dispositivo. O token fica guardado só neste dispositivo; tem de o introduzir uma vez em cada um.</p>
+    <label>Utilizador
+      <input name="owner" required autocomplete="off">
+    </label>
+    <label>Repositório de dados (privado)
+      <input name="repo" required autocomplete="off">
+    </label>
+    <label>Token de acesso (fine-grained, permissão Contents: read and write)
+      <input name="token" type="password" required autocomplete="off" placeholder="github_pat_…">
+    </label>
+    <p id="syncMsg" role="alert"></p>
+    <div class="actions">
+      <button class="btn ghost" type="button" data-action="syncDisconnect">Desligar</button>
+      <button class="btn ghost" type="button" data-action="syncClose">Fechar</button>
+      <button class="btn" type="submit">Ligar</button>
+    </div>
+  </form>
+</dialog>
+
+<script>
+const KEY = 'casamento-convidados-v1';
+const CFG_KEY = 'casamento-github-v1';
+
+function load() {
+  try {
+    const s = JSON.parse(localStorage.getItem(KEY));
+    if (s && Array.isArray(s.guests) && Array.isArray(s.tables)) return s;
+  } catch {}
+  return { guests: [], tables: [] };
+}
+function save() {
+  try { localStorage.setItem(KEY, JSON.stringify(state)); } catch {}
+  schedulePush();
+}
+
+/* ---------- sincronização com o GitHub ---------- */
+const DATA_PATH = 'dados.json';
+let cfg = null;
+try { cfg = JSON.parse(localStorage.getItem(CFG_KEY)); } catch {}
+const sync = { sha: null, dirty: false, busy: false, timer: null, status: 'off' };
+
+function setStatus(s, detail) {
+  sync.status = s;
+  const b = document.getElementById('sync');
+  if (!b) return;
+  const labels = {
+    off: '☁ Ligar ao GitHub',
+    ok: '☁ Sincronizado',
+    saving: '☁ A guardar…',
+    loading: '☁ A carregar…',
+    err: '☁ Erro' + (detail ? ': ' + detail : ''),
+  };
+  b.textContent = labels[s];
+  b.classList.toggle('ok', s === 'ok');
+  b.classList.toggle('err', s === 'err');
+}
+
+async function gh(method, body) {
+  const res = await fetch(`https://api.github.com/repos/${encodeURIComponent(cfg.owner)}/${encodeURIComponent(cfg.repo)}/contents/${DATA_PATH}`, {
+    method,
+    cache: 'no-store',
+    headers: {
+      Accept: 'application/vnd.github+json',
+      Authorization: `Bearer ${cfg.token}`,
+      'X-GitHub-Api-Version': '2022-11-28',
+    },
+    body: body ? JSON.stringify(body) : undefined,
+  });
+  return res;
+}
+const toB64 = (s) => { const b = new TextEncoder().encode(s); let r = ''; b.forEach((x) => (r += String.fromCharCode(x))); return btoa(r); };
+const fromB64 = (s) => new TextDecoder().decode(Uint8Array.from(atob(s.replace(/\s/g, '')), (c) => c.charCodeAt(0)));
+const httpErr = (res) => (res.status === 401 || res.status === 403 ? 'token sem acesso' : res.status === 404 ? 'repositório não encontrado' : 'HTTP ' + res.status);
+
+async function pull({ initial = false } = {}) {
+  if (!cfg) return;
+  setStatus('loading');
+  try {
+    const res = await gh('GET');
+    if (!res.ok) throw new Error(httpErr(res));
+    const file = await res.json();
+    const data = JSON.parse(fromB64(file.content));
+    if (!Array.isArray(data.guests) || !Array.isArray(data.tables)) throw new Error('ficheiro inválido');
+    const localHasData = state.guests.length || state.tables.length;
+    if (initial && localHasData && JSON.stringify(data) !== JSON.stringify(state) &&
+        !confirm('O GitHub já tem dados diferentes dos deste dispositivo.\n\nOK = usar os do GitHub (descarta os daqui)\nCancelar = substituir os do GitHub pelos daqui')) {
+      sync.sha = file.sha; sync.dirty = true; await push(); return;
+    }
+    sync.sha = file.sha;
+    state = data;
+    try { localStorage.setItem(KEY, JSON.stringify(state)); } catch {}
+    if (!table(ui.selected)) ui.selected = null;
+    render();
+    setStatus('ok');
+  } catch (e) {
+    setStatus('err', e.message);
+  }
+}
+
+function schedulePush() {
+  if (!cfg) return;
+  sync.dirty = true;
+  clearTimeout(sync.timer);
+  setStatus('saving');
+  sync.timer = setTimeout(push, 700);
+}
+
+async function push() {
+  if (!cfg || sync.busy) return;
+  sync.busy = true;
+  try {
+    while (sync.dirty) {
+      sync.dirty = false;
+      setStatus('saving');
+      const res = await gh('PUT', {
+        message: 'Atualizar convidados',
+        content: toB64(JSON.stringify(state, null, 2)),
+        ...(sync.sha ? { sha: sync.sha } : {}),
+      });
+      if (res.status === 409 || res.status === 422) {
+        // alterado entretanto noutro dispositivo
+        const cur = await gh('GET');
+        if (!cur.ok) throw new Error(httpErr(res));
+        const file = await cur.json();
+        if (confirm('Os dados foram alterados noutro dispositivo.\n\nOK = carregar a versão do GitHub (descarta as alterações daqui)\nCancelar = substituir a do GitHub pela deste dispositivo')) {
+          sync.busy = false;
+          await pull();
+          return;
+        }
+        sync.sha = file.sha;
+        sync.dirty = true;
+        continue;
+      }
+      if (!res.ok) throw new Error(httpErr(res));
+      sync.sha = (await res.json()).content.sha;
+    }
+    setStatus('ok');
+  } catch (e) {
+    sync.dirty = true;
+    setStatus('err', e.message);
+  } finally {
+    sync.busy = false;
+  }
+}
+
+document.addEventListener('visibilitychange', () => {
+  if (document.visibilityState === 'visible' && cfg && !sync.dirty && !sync.busy) pull();
+});
+window.addEventListener('beforeunload', (e) => { if (sync.dirty) e.preventDefault(); });
+
+let state = load();
+const ui = { tab: 'guests', search: '', selected: null };
+
+const $ = (s) => document.querySelector(s);
+const uid = () => Date.now().toString(36) + Math.random().toString(36).slice(2, 7);
+const esc = (s) => String(s).replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+const collator = new Intl.Collator('pt', { sensitivity: 'base' });
+
+const guest = (id) => state.guests.find((g) => g.id === id);
+const table = (id) => state.tables.find((t) => t.id === id);
+const seated = (tid) => state.guests.filter((g) => g.tableId === tid).sort((a, b) => collator.compare(a.name, b.name));
+const initials = (n) => n.trim().split(/\s+/).map((w) => w[0]).slice(0, 2).join('').toUpperCase();
+
+function colors(group) {
+  if (!group) return { bd: '#999', bg: '#eee' };
+  let h = 0;
+  for (const c of group.toLowerCase()) h = (h * 31 + c.charCodeAt(0)) % 360;
+  return { bd: `hsl(${h} 45% 48%)`, bg: `hsl(${h} 60% 88%)` };
+}
+const colorStyle = (g) => { const c = colors(g.group); return `--bd:${c.bd};--bg-c:${c.bg}`; };
+
+/* ---------- ações ---------- */
+function addGuest(name, group) {
+  name = name.trim();
+  if (!name) return;
+  state.guests.push({ id: uid(), name, group: (group || '').trim(), tableId: null });
+}
+
+function removeGuest(id) {
+  const g = guest(id);
+  if (!g || !confirm(`Remover ${g.name}?`)) return;
+  state.guests = state.guests.filter((x) => x.id !== id);
+  commit();
+}
+
+function addTable(name, seats, shape) {
+  const n = state.tables.length;
+  state.tables.push({
+    id: uid(),
+    name: name.trim() || `Mesa ${n + 1}`,
+    seats: Math.min(40, Math.max(1, seats | 0)),
+    shape,
+    x: 40 + (n % 4) * 260,
+    y: 40 + Math.floor(n / 4) * 260,
+  });
+}
+
+function removeTable(id) {
+  const t = table(id);
+  if (!t || !confirm(`Remover ${t.name}? Os convidados ficam sem mesa.`)) return;
+  state.guests.forEach((g) => { if (g.tableId === id) g.tableId = null; });
+  state.tables = state.tables.filter((x) => x.id !== id);
+  if (ui.selected === id) ui.selected = null;
+  commit();
+}
+
+function assign(guestId, tableId) {
+  const g = guest(guestId);
+  if (!g) return;
+  if (tableId) {
+    const t = table(tableId);
+    if (!t) return;
+    if (g.tableId !== tableId && seated(tableId).length >= t.seats) {
+      alert(`${t.name} está cheia.`);
+      render();
+      return;
+    }
+    g.tableId = tableId;
+  } else {
+    g.tableId = null;
+  }
+  commit();
+}
+
+function autoLayout() {
+  state.tables.forEach((t, i) => {
+    t.x = 40 + (i % 4) * 260;
+    t.y = 40 + Math.floor(i / 4) * 260;
+  });
+  commit();
+}
+
+function commit() { save(); render(); }
+
+/* ---------- geometria da mesa ---------- */
+function layout(t) {
+  const n = t.seats, S = 28;
+  if (t.shape === 'rect') {
+    const top = Math.ceil(n / 2), bottom = n - top;
+    const w = Math.max(120, top * 34 + 10), h = 120;
+    const seats = [];
+    for (let i = 0; i < top; i++) seats.push({ x: (w / top) * (i + 0.5) - S / 2, y: 0 });
+    for (let i = 0; i < bottom; i++) seats.push({ x: (w / bottom) * (i + 0.5) - S / 2, y: h - S });
+    return { w, h, seats, body: { x: 0, y: 32, w, h: 56 } };
+  }
+  const rs = Math.max(52, (n * 34) / (2 * Math.PI));
+  const size = 2 * (rs + S / 2), c = size / 2, br = rs - 18;
+  const seats = [];
+  for (let i = 0; i < n; i++) {
+    const a = -Math.PI / 2 + (2 * Math.PI * i) / n;
+    seats.push({ x: c + rs * Math.cos(a) - S / 2, y: c + rs * Math.sin(a) - S / 2 });
+  }
+  return { w: size, h: size, seats, body: { x: c - br, y: c - br, w: 2 * br, h: 2 * br } };
+}
+
+/* ---------- render ---------- */
+function tableOptions(g) {
+  const opts = state.tables.map((t) => {
+    const n = seated(t.id).length;
+    const full = n >= t.seats && g.tableId !== t.id;
+    return `<option value="${t.id}" ${g.tableId === t.id ? 'selected' : ''} ${full ? 'disabled' : ''}>${esc(t.name)} (${n}/${t.seats})</option>`;
+  });
+  return `<option value="">Sem mesa</option>${opts.join('')}`;
+}
+
+function addSelect(t) {
+  const free = state.guests.filter((g) => !g.tableId).sort((a, b) => collator.compare(a.name, b.name));
+  const full = seated(t.id).length >= t.seats;
+  const opts = free.map((g) => `<option value="${g.id}">${esc(g.name)}</option>`).join('');
+  return `<select data-addto="${t.id}" ${full || !free.length ? 'disabled' : ''} aria-label="Sentar convidado em ${esc(t.name)}">
+    <option value="">${full ? 'Mesa cheia' : free.length ? '+ Sentar convidado…' : 'Sem convidados livres'}</option>${opts}</select>`;
+}
+
+function renderStats() {
+  const total = state.guests.length;
+  const placed = state.guests.filter((g) => g.tableId).length;
+  const seats = state.tables.reduce((s, t) => s + t.seats, 0);
+  $('#stats').innerHTML = `
+    <span class="stat"><b>${total}</b> convidados</span>
+    <span class="stat"><b>${placed}</b> sentados</span>
+    <span class="stat"><b>${total - placed}</b> sem mesa</span>
+    <span class="stat"><b>${state.tables.length}</b> mesas · <b>${seats}</b> lugares</span>`;
+}
+
+function renderGuests() {
+  const groups = [...new Set(state.guests.map((g) => g.group).filter(Boolean))].sort(collator.compare);
+  $('#groups').innerHTML = groups.map((g) => `<option value="${esc(g)}">`).join('');
+
+  const q = ui.search.trim().toLowerCase();
+  const list = state.guests
+    .filter((g) => !q || g.name.toLowerCase().includes(q) || g.group.toLowerCase().includes(q))
+    .sort((a, b) => collator.compare(a.name, b.name));
+
+  $('#guestList').innerHTML = list.length
+    ? list.map((g) => `
+      <li style="${colorStyle(g)}">
+        <span class="dot"></span>
+        <span class="gname">${esc(g.name)}</span>
+        ${g.group ? `<span class="tag">${esc(g.group)}</span>` : ''}
+        <select data-assign="${g.id}" aria-label="Mesa de ${esc(g.name)}">${tableOptions(g)}</select>
+        <button class="icon" data-action="removeGuest" data-id="${g.id}" title="Remover" aria-label="Remover ${esc(g.name)}">✕</button>
+      </li>`).join('')
+    : `<li class="empty" style="display:block">${state.guests.length ? 'Nenhum resultado.' : 'Ainda não há convidados. Adicione o primeiro acima.'}</li>`;
+}
+
+function renderTables() {
+  $('#tableGrid').innerHTML = state.tables.length
+    ? state.tables.map((t) => {
+        const people = seated(t.id);
+        const full = people.length >= t.seats;
+        return `
+        <article class="card tcard">
+          <header>
+            <h3>${esc(t.name)}</h3>
+            <span class="cap ${full ? 'full' : ''}">${people.length}/</span>
+            <input class="seatsin" type="number" min="${Math.max(1, people.length)}" max="40" value="${t.seats}" data-seats="${t.id}" aria-label="Lugares de ${esc(t.name)}">
+            <button class="icon" data-action="removeTable" data-id="${t.id}" title="Remover mesa" aria-label="Remover ${esc(t.name)}">✕</button>
+          </header>
+          <ul class="list">
+            ${people.map((g) => `
+              <li style="${colorStyle(g)}"><span class="dot"></span><span class="gname">${esc(g.name)}</span>
+                <button class="icon" data-action="unassign" data-id="${g.id}" title="Tirar da mesa" aria-label="Tirar ${esc(g.name)} da mesa">✕</button></li>`).join('')
+              || '<li class="cap">Mesa vazia</li>'}
+          </ul>
+          ${addSelect(t)}
+        </article>`;
+      }).join('')
+    : '<div class="empty" style="grid-column:1/-1">Ainda não há mesas. Adicione a primeira acima.</div>';
+}
+
+function renderRoom() {
+  const room = $('#room');
+  let maxX = 0, maxY = 0;
+  room.innerHTML = state.tables.map((t) => {
+    const L = layout(t);
+    maxX = Math.max(maxX, t.x + L.w);
+    maxY = Math.max(maxY, t.y + L.h);
+    const people = seated(t.id);
+    const seatsHtml = L.seats.map((s, i) => {
+      const g = people[i];
+      return g
+        ? `<div class="seat filled" draggable="true" data-guest-drag="${g.id}" title="${esc(g.name)}" style="left:${s.x}px;top:${s.y}px;${colorStyle(g)}">${esc(initials(g.name))}</div>`
+        : `<div class="seat" style="left:${s.x}px;top:${s.y}px"></div>`;
+    }).join('');
+    const b = L.body;
+    return `
+      <div class="rt ${ui.selected === t.id ? 'sel' : ''}" data-table="${t.id}" style="left:${t.x}px;top:${t.y}px;width:${L.w}px;height:${L.h}px">
+        <div class="tbody ${t.shape === 'rect' ? 'rect' : 'round'}" style="left:${b.x}px;top:${b.y}px;width:${b.w}px;height:${b.h}px">
+          <b>${esc(t.name)}</b><small>${people.length}/${t.seats}</small>
+        </div>
+        ${seatsHtml}
+      </div>`;
+  }).join('') || '<div class="empty" style="padding-top:80px">Adicione mesas no separador “Mesas” para as ver aqui.</div>';
+  room.style.width = Math.max(maxX + 60, 0) + 'px';
+  room.style.height = Math.max(maxY + 60, 560) + 'px';
+
+  const free = state.guests.filter((g) => !g.tableId).sort((a, b) => collator.compare(a.name, b.name));
+  $('#unCount').textContent = free.length;
+  $('#unassignedList').innerHTML = free.length
+    ? free.map((g) => `<li draggable="true" data-guest-drag="${g.id}" style="${colorStyle(g)}"><span class="dot"></span><span class="gname">${esc(g.name)}</span></li>`).join('')
+    : '<li class="cap">Todos têm mesa 🎉</li>';
+
+  const groups = [...new Set(state.guests.map((g) => g.group).filter(Boolean))].sort(collator.compare);
+  $('#legend').innerHTML = groups.length
+    ? groups.map((g) => `<span><i class="dot" style="--bd:${colors(g).bd}"></i>${esc(g)}</span>`).join('')
+    : '<span>Sem grupos definidos</span>';
+
+  const t = table(ui.selected);
+  const d = $('#detail');
+  if (!t) { d.hidden = true; ui.selected = null; return; }
+  const people = seated(t.id);
+  d.hidden = false;
+  d.innerHTML = `
+    <h3>${esc(t.name)} · ${people.length}/${t.seats}</h3>
+    <ul class="list">
+      ${people.map((g) => `<li style="${colorStyle(g)}"><span class="dot"></span><span class="gname">${esc(g.name)}</span>
+        <button class="icon" data-action="unassign" data-id="${g.id}" title="Tirar da mesa" aria-label="Tirar ${esc(g.name)} da mesa">✕</button></li>`).join('') || '<li class="cap">Mesa vazia</li>'}
+    </ul>
+    ${addSelect(t)}`;
+  d.querySelector('select')?.style.setProperty('width', '100%');
+}
+
+function render() {
+  renderStats();
+  renderGuests();
+  renderTables();
+  renderRoom();
+  for (const b of document.querySelectorAll('nav button')) b.setAttribute('aria-selected', b.dataset.id === ui.tab);
+  for (const s of ['guests', 'tables', 'room']) $('#tab-' + s).hidden = ui.tab !== s;
+}
+
+/* ---------- eventos ---------- */
+document.addEventListener('click', (e) => {
+  const b = e.target.closest('[data-action]');
+  if (!b) return;
+  const id = b.dataset.id;
+  switch (b.dataset.action) {
+    case 'tab': ui.tab = id; render(); break;
+    case 'removeGuest': removeGuest(id); break;
+    case 'removeTable': removeTable(id); break;
+    case 'unassign': assign(id, null); break;
+    case 'autoLayout': autoLayout(); break;
+    case 'export': exportData(); break;
+    case 'import': $('#importFile').click(); break;
+    case 'settings': openSync(); break;
+    case 'syncClose': $('#syncDialog').close(); break;
+    case 'syncDisconnect': disconnect(); break;
+  }
+});
+
+document.addEventListener('change', (e) => {
+  const el = e.target;
+  if (el.dataset.assign) assign(el.dataset.assign, el.value || null);
+  else if (el.dataset.addto) { if (el.value) assign(el.value, el.dataset.addto); }
+  else if (el.dataset.seats) {
+    const t = table(el.dataset.seats);
+    const min = Math.max(1, seated(t.id).length);
+    t.seats = Math.min(40, Math.max(min, el.valueAsNumber | 0 || min));
+    commit();
+  }
+});
+
+$('#guestForm').addEventListener('submit', (e) => {
+  e.preventDefault();
+  const f = e.target;
+  addGuest(f.name.value, f.group.value);
+  f.name.value = '';
+  f.name.focus();
+  commit();
+});
+
+$('#bulkForm').addEventListener('submit', (e) => {
+  e.preventDefault();
+  const f = e.target;
+  f.names.value.split('\n').forEach((n) => addGuest(n, f.group.value));
+  f.reset();
+  commit();
+});
+
+$('#tableForm').addEventListener('submit', (e) => {
+  e.preventDefault();
+  const f = e.target;
+  addTable(f.name.value, f.seats.valueAsNumber, f.shape.value);
+  f.name.value = '';
+  commit();
+});
+
+$('#search').addEventListener('input', (e) => { ui.search = e.target.value; renderGuests(); });
+
+/* arrastar mesas na sala */
+let drag = null;
+const room = $('#room');
+room.addEventListener('pointerdown', (e) => {
+  const el = e.target.closest('.rt');
+  if (!el || e.target.closest('.seat.filled')) return;
+  const t = table(el.dataset.table);
+  drag = { el, t, sx: e.clientX, sy: e.clientY, ox: t.x, oy: t.y, moved: false };
+  el.setPointerCapture(e.pointerId);
+});
+room.addEventListener('pointermove', (e) => {
+  if (!drag) return;
+  const dx = e.clientX - drag.sx, dy = e.clientY - drag.sy;
+  if (!drag.moved && Math.hypot(dx, dy) < 4) return;
+  drag.moved = true;
+  drag.el.classList.add('dragging');
+  drag.t.x = Math.max(0, Math.round(drag.ox + dx));
+  drag.t.y = Math.max(0, Math.round(drag.oy + dy));
+  drag.el.style.left = drag.t.x + 'px';
+  drag.el.style.top = drag.t.y + 'px';
+});
+const endDrag = () => {
+  if (!drag) return;
+  const { moved, t } = drag;
+  drag = null;
+  if (moved) { save(); renderRoom(); }
+  else { ui.selected = ui.selected === t.id ? null : t.id; renderRoom(); }
+};
+room.addEventListener('pointerup', endDrag);
+room.addEventListener('pointercancel', endDrag);
+
+/* arrastar convidados */
+document.addEventListener('dragstart', (e) => {
+  const el = e.target.closest?.('[data-guest-drag]');
+  if (!el) return;
+  e.dataTransfer.setData('text/plain', el.dataset.guestDrag);
+  e.dataTransfer.effectAllowed = 'move';
+});
+const dropTarget = (e) => e.target.closest?.('.rt, #unassignedDrop');
+const clearOver = () => document.querySelectorAll('.over').forEach((x) => x.classList.remove('over'));
+document.addEventListener('dragover', (e) => {
+  const el = dropTarget(e);
+  clearOver();
+  if (!el) return;
+  e.preventDefault();
+  el.classList.add('over');
+});
+document.addEventListener('drop', (e) => {
+  const el = dropTarget(e);
+  clearOver();
+  if (!el) return;
+  e.preventDefault();
+  const id = e.dataTransfer.getData('text/plain');
+  if (!guest(id)) return;
+  assign(id, el.classList.contains('rt') ? el.dataset.table : null);
+});
+document.addEventListener('dragend', clearOver);
+
+/* exportar / importar */
+function exportData() {
+  const blob = new Blob([JSON.stringify(state, null, 2)], { type: 'application/json' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'casamento-convidados.json';
+  a.click();
+  URL.revokeObjectURL(a.href);
+}
+$('#importFile').addEventListener('change', async (e) => {
+  const file = e.target.files[0];
+  e.target.value = '';
+  if (!file) return;
+  try {
+    const data = JSON.parse(await file.text());
+    if (!Array.isArray(data.guests) || !Array.isArray(data.tables)) throw new Error();
+    if (!confirm('Isto substitui todos os dados atuais. Continuar?')) return;
+    state = data;
+    ui.selected = null;
+    commit();
+  } catch {
+    alert('Ficheiro inválido.');
+  }
+});
+
+/* ligação ao GitHub */
+function openSync() {
+  const f = $('#syncForm');
+  f.owner.value = cfg?.owner || 'Mr-Maia';
+  f.repo.value = cfg?.repo || 'casamento-dados';
+  f.token.value = cfg?.token || '';
+  $('#syncMsg').textContent = '';
+  $('#syncDialog').showModal();
+}
+function disconnect() {
+  if (!cfg || !confirm('Desligar do GitHub neste dispositivo? Os dados no GitHub não são apagados.')) return;
+  cfg = null;
+  try { localStorage.removeItem(CFG_KEY); } catch {}
+  setStatus('off');
+  $('#syncDialog').close();
+}
+$('#syncForm').addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const f = e.target;
+  cfg = { owner: f.owner.value.trim(), repo: f.repo.value.trim(), token: f.token.value.trim() };
+  try { localStorage.setItem(CFG_KEY, JSON.stringify(cfg)); } catch {}
+  $('#syncDialog').close();
+  sync.sha = null;
+  await pull({ initial: true });
+  if (sync.status === 'err') { $('#syncMsg').textContent = ''; openSync(); $('#syncMsg').textContent = 'Não foi possível ligar. Verifique o token e o repositório.'; }
+});
+
+render();
+if (cfg) pull({ initial: true }); else setStatus('off');
+</script>
+</body>
+</html>
