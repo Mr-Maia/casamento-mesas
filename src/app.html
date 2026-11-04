@@ -1,0 +1,1510 @@
+<!doctype html>
+<html lang="pt-PT">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Casamento – Convidados e Mesas</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #f7f1ea;            /* marfim quente */
+    --card: #fffdf9;
+    --ink: #2f2528;
+    --muted: #8a7b7f;
+    --line: #ece2d9;
+    --line-strong: #dfd1c4;
+    --accent: #2a7f79;        /* azul turquesa (só em destaques) */
+    --accent-deep: #1f6560;
+    --accent-ink: #ffffff;
+    --accent-soft: #e3f1ef;
+    --gold: #c3a04a;          /* dourado */
+    --gold-deep: #a8862f;
+    --gold-soft: #fbf4e1;
+    --pink: #d9729a;          /* rosa */
+    --pink-soft: #fceaf0;
+    --danger: #b8325a;
+    --ok: #3f8f6e;
+    --radius: 18px;
+    --shadow-sm: 0 1px 2px rgba(74, 52, 40, .06), 0 1px 1px rgba(74, 52, 40, .04);
+    --shadow: 0 1px 2px rgba(74, 52, 40, .05), 0 8px 24px -8px rgba(74, 52, 40, .14);
+    --shadow-lg: 0 2px 4px rgba(74, 52, 40, .06), 0 18px 40px -12px rgba(74, 52, 40, .22);
+    --serif: "Cormorant Garamond", Georgia, "Times New Roman", serif;
+    --sans: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    color: var(--ink);
+    font: 14.5px/1.5 var(--sans);
+    background:
+      radial-gradient(1200px 600px at 0% -10%, rgba(217, 114, 154, .10), transparent 60%),
+      radial-gradient(1000px 600px at 100% 0%, rgba(42, 127, 121, .09), transparent 60%),
+      radial-gradient(900px 700px at 50% 120%, rgba(195, 160, 74, .12), transparent 60%),
+      var(--bg);
+    background-attachment: fixed;
+    -webkit-font-smoothing: antialiased;
+  }
+  html, body { height: 100%; }
+  body { display: flex; flex-direction: column; }
+  ::selection { background: var(--pink-soft); }
+
+  /* cabeçalho */
+  header {
+    position: relative;
+    background: rgba(255, 253, 249, .78);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border-bottom: 1px solid var(--line);
+    padding: 14px 22px;
+  }
+  header::after {
+    content: ''; position: absolute; left: 0; right: 0; bottom: -1px; height: 2px;
+    background: linear-gradient(90deg, transparent, var(--accent) 20%, var(--gold) 50%, var(--pink) 80%, transparent);
+    opacity: .7;
+  }
+  .top { display: flex; flex-wrap: wrap; gap: 10px 28px; align-items: center; }
+  .brand { display: flex; align-items: center; gap: 12px; }
+  .brand .mono {
+    width: 42px; height: 42px; border-radius: 50%; flex: none;
+    display: grid; place-items: center;
+    background: radial-gradient(circle at 35% 30%, #fff, var(--gold-soft));
+    border: 1px solid var(--gold); box-shadow: 0 0 0 3px #fff, 0 0 0 4px rgba(195, 160, 74, .35), var(--shadow-sm);
+    color: var(--gold-deep);
+  }
+  h1 { font: 600 28px/1 var(--serif); margin: 0; color: var(--ink); letter-spacing: .01em; }
+  h1 em { font-style: italic; color: var(--accent); font-weight: 500; }
+  .brand p { margin: 3px 0 0; font-size: 11px; letter-spacing: .18em; text-transform: uppercase; color: var(--muted); }
+  .stats { display: flex; gap: 10px; flex-wrap: wrap; flex: 1; align-items: center; }
+  .stat {
+    background: var(--card); border: 1px solid var(--line); border-radius: 14px;
+    padding: 6px 14px; font-size: 12px; color: var(--muted); box-shadow: var(--shadow-sm);
+    display: inline-flex; align-items: baseline; gap: 6px;
+  }
+  .stat b { color: var(--ink); font: 600 20px/1 var(--serif); font-variant-numeric: lining-nums; }
+  .stat.progress { flex-direction: column; align-items: stretch; gap: 5px; min-width: 170px; }
+  .stat.progress .row1 { display: flex; justify-content: space-between; gap: 10px; }
+  .stat.progress .row1 b { font: 600 12px/1.2 var(--sans); color: var(--accent); }
+  .bar { height: 6px; border-radius: 999px; background: var(--line); overflow: hidden; }
+  .bar span { display: block; height: 100%; border-radius: inherit; background: linear-gradient(90deg, var(--accent), var(--gold), var(--pink)); transition: width .4s ease; }
+
+  .app { flex: 1; min-height: 0; display: grid; grid-template-columns: minmax(0, 1fr) 420px; gap: 18px; padding: 18px; }
+  .card {
+    background: var(--card); border: 1px solid var(--line); border-radius: var(--radius);
+    padding: 16px 18px; flex: none; box-shadow: var(--shadow);
+  }
+  .card h3 {
+    margin: 0 0 12px; display: flex; align-items: center; gap: 8px;
+    font: 600 19px/1.2 var(--serif); color: var(--ink); letter-spacing: .01em;
+  }
+  .card h3 svg { color: var(--gold); flex: none; }
+  .card h3 .count {
+    font: 600 11px/1 var(--sans); color: var(--accent); background: var(--accent-soft);
+    padding: 4px 9px; border-radius: 999px; letter-spacing: .02em;
+  }
+  form.row { display: flex; flex-wrap: wrap; gap: 10px; align-items: end; }
+  form.row label { flex: 1 1 90px; min-width: 0; }
+  label { display: flex; flex-direction: column; gap: 5px; font-size: 11px; font-weight: 500; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); }
+  input, select, textarea {
+    font: inherit; font-size: 14px; letter-spacing: normal; text-transform: none; color: var(--ink);
+    padding: 9px 12px; border: 1px solid var(--line-strong); border-radius: 11px; background: #fff; min-width: 0;
+    transition: border-color .15s, box-shadow .15s;
+  }
+  input::placeholder, textarea::placeholder { color: #b9abaf; }
+  input:hover, select:hover, textarea:hover { border-color: #cdbcae; }
+  input:focus, select:focus, textarea:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 0 4px rgba(42, 127, 121, .14); }
+  form.row input, form.row select { height: 40px; }
+  input[type=checkbox] { accent-color: var(--accent); width: 15px; height: 15px; margin: 0; }
+  button.btn {
+    font: inherit; font-size: 13.5px; font-weight: 600; letter-spacing: .01em;
+    padding: 9px 18px; border-radius: 999px; border: 1px solid var(--accent-deep);
+    background: linear-gradient(180deg, #33918a, var(--accent)); color: var(--accent-ink); cursor: pointer;
+    box-shadow: 0 1px 0 rgba(255, 255, 255, .25) inset, 0 4px 12px -4px rgba(42, 127, 121, .55);
+    transition: transform .12s, box-shadow .15s, filter .15s;
+  }
+  button.btn:hover { filter: brightness(1.06); transform: translateY(-1px); box-shadow: 0 1px 0 rgba(255, 255, 255, .25) inset, 0 8px 18px -6px rgba(42, 127, 121, .6); }
+  button.btn:active { transform: translateY(0); }
+  button.btn.ghost { background: var(--card); color: var(--accent-deep); border-color: var(--line-strong); box-shadow: var(--shadow-sm); }
+  button.btn.ghost:hover { border-color: var(--accent); background: var(--accent-soft); }
+  button.btn.gold {
+    background: linear-gradient(180deg, #d4b45f, var(--gold)); border-color: var(--gold-deep); color: #3a2c05;
+    box-shadow: 0 1px 0 rgba(255, 255, 255, .35) inset, 0 4px 12px -4px rgba(168, 134, 47, .6);
+  }
+  button.icon {
+    border: 0; background: none; cursor: pointer; color: #b3a4a8; font-size: 13px; padding: 3px 8px; border-radius: 999px;
+    transition: color .15s, background .15s;
+  }
+  button.icon:hover { color: var(--danger); background: var(--pink-soft); }
+  details { margin-top: 12px; border-top: 1px dashed var(--line-strong); padding-top: 10px; }
+  summary { cursor: pointer; color: var(--accent); font-size: 13px; font-weight: 500; list-style: none; display: inline-flex; align-items: center; gap: 6px; }
+  summary::-webkit-details-marker { display: none; }
+  summary::before { content: '+'; display: grid; place-items: center; width: 18px; height: 18px; border-radius: 50%; background: var(--accent-soft); font-weight: 600; transition: transform .2s; }
+  details[open] summary::before { content: '–'; }
+  details textarea { width: 100%; min-height: 110px; margin: 10px 0; resize: vertical; }
+
+  /* sala (esquerda) */
+  .stage { display: flex; flex-direction: column; min-width: 0; min-height: 0; gap: 12px; }
+  .seatsedit { width: 96px; font-family: var(--sans); font-size: 15px; font-weight: 600; }
+  .rename {
+    position: absolute; z-index: 7; width: 170px; text-align: center; transform: translate(-50%, -50%);
+    font: 600 16px/1.2 var(--serif); padding: 7px 12px; border: 1.5px solid var(--pink); border-radius: 999px;
+    box-shadow: 0 0 0 4px rgba(217, 114, 154, .18), var(--shadow-lg);
+  }
+  .roomwrap { position: relative; flex: 1; min-height: 0; display: flex; }
+  .roomwrap .roomscroll { flex: 1; min-width: 0; touch-action: pan-x pan-y; }
+  .addtable { position: absolute; right: 20px; bottom: 20px; z-index: 10; display: flex; flex-direction: column; align-items: flex-end; gap: 12px; }
+  .fabrow { display: flex; align-items: center; gap: 10px; }
+  /* barra da mesa selecionada: só em ecrãs tácteis, onde não há teclado para os atalhos */
+  .tablebar { display: none; }
+  @media (pointer: coarse) {
+    .tablebar:not([hidden]) {
+      position: absolute; top: 14px; left: 14px; right: 64px; z-index: 10; width: fit-content; max-width: calc(100% - 78px);
+      display: flex; align-items: center; gap: 4px; padding: 4px 6px 4px 14px; border-radius: 999px;
+      background: rgba(255, 253, 249, .95); border: 1px solid var(--line-strong); box-shadow: var(--shadow-lg);
+      animation: rise .18s ease-out;
+    }
+  }
+  .tablebar .tn { font: 600 17px/1 var(--serif); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; min-width: 0; margin-right: 4px; }
+  .tablebar button.ts { width: auto; min-width: 52px; padding: 0 10px; border-radius: 999px; font: 600 13px/1 var(--sans); color: var(--gold-deep); font-variant-numeric: tabular-nums; background: var(--gold-soft); height: 32px; }
+  .tablebar .sep { width: 1px; height: 22px; background: var(--line-strong); margin: 0 4px; flex: none; }
+  .tablebar button {
+    flex: none; width: 40px; height: 40px; border-radius: 50%; border: 0; background: none; cursor: pointer; color: var(--ink);
+    font: 600 20px/1 var(--sans); display: grid; place-items: center; transition: background .15s, color .15s;
+  }
+  .tablebar button:hover, .tablebar button:active { background: var(--accent-soft); color: var(--accent-deep); }
+  .tablebar button.danger { color: var(--danger); }
+  .tablebar button.danger:hover, .tablebar button.danger:active { background: var(--pink-soft); color: var(--danger); }
+  .tablebar button:disabled { opacity: .3; pointer-events: none; }
+  .panelbtn {
+    position: absolute; top: 14px; right: 14px; z-index: 10; width: 38px; height: 38px; border-radius: 50%; cursor: pointer;
+    display: grid; place-items: center; color: var(--ink); background: rgba(255, 253, 249, .92);
+    border: 1px solid var(--line-strong); box-shadow: var(--shadow); transition: color .15s, border-color .15s;
+  }
+  .panelbtn:hover { color: var(--accent-deep); border-color: var(--accent); }
+  .panelbtn svg { transition: transform .3s; }
+  .panelbtn[aria-expanded=false] svg { transform: rotate(180deg); }
+  .app { transition: grid-template-columns .3s ease, gap .3s ease; }
+  .app.collapsed { grid-template-columns: minmax(0, 1fr) 0px; gap: 0; }
+  .app.collapsed .side { visibility: hidden; overflow: hidden; min-width: 0; padding: 0; }
+  .stat.mode { font-size: 11.5px; font-weight: 600; letter-spacing: .06em; text-transform: uppercase; color: var(--gold-deep); background: var(--gold-soft); border-color: rgba(195, 160, 74, .45); }
+  body.view .edit-only { display: none !important; }
+  body.view .rt { cursor: pointer; }
+  body.view #guestList li { cursor: default; }
+  .zoomctl {
+    display: inline-flex; align-items: center; border-radius: 999px; border: 1px solid var(--line-strong);
+    background: rgba(255, 253, 249, .92); box-shadow: var(--shadow); overflow: hidden;
+  }
+  .zoomctl button {
+    font: inherit; font-size: 15px; font-weight: 600; color: var(--ink); background: none; border: 0; cursor: pointer;
+    height: 38px; min-width: 38px; padding: 0 10px; transition: background .15s, color .15s;
+  }
+  .zoomctl button:hover { background: var(--accent-soft); color: var(--accent-deep); }
+  .zoomctl #zoomVal { font-size: 12.5px; min-width: 56px; font-variant-numeric: tabular-nums; border-inline: 1px solid var(--line); }
+  .toggle {
+    font: inherit; font-size: 13px; font-weight: 600; cursor: pointer; display: inline-flex; align-items: center; gap: 9px;
+    padding: 10px 16px 10px 12px; border-radius: 999px; border: 1px solid var(--line-strong);
+    background: rgba(255, 253, 249, .92); color: var(--ink); box-shadow: var(--shadow);
+    transition: border-color .15s, color .15s;
+  }
+  .toggle:hover { border-color: var(--accent); }
+  .toggle .sw { position: relative; width: 30px; height: 18px; border-radius: 999px; background: var(--line-strong); transition: background .2s; flex: none; }
+  .toggle .sw::after {
+    content: ''; position: absolute; top: 2px; left: 2px; width: 14px; height: 14px; border-radius: 50%; background: #fff;
+    box-shadow: 0 1px 3px rgba(74, 52, 40, .35); transition: transform .2s;
+  }
+  .toggle[aria-pressed=true] { color: var(--accent-deep); border-color: var(--accent); }
+  .toggle[aria-pressed=true] .sw { background: var(--accent); }
+  .toggle[aria-pressed=true] .sw::after { transform: translateX(12px); }
+  .fab {
+    font: inherit; font-size: 14px; font-weight: 600; cursor: pointer; display: inline-flex; align-items: center; gap: 8px;
+    padding: 12px 20px 12px 16px; border-radius: 999px; border: 1px solid var(--gold-deep);
+    background: linear-gradient(180deg, #d4b45f, var(--gold)); color: #3a2c05;
+    box-shadow: 0 1px 0 rgba(255, 255, 255, .35) inset, 0 10px 24px -8px rgba(168, 134, 47, .75);
+    transition: transform .12s, filter .15s;
+  }
+  .fab:hover { filter: brightness(1.05); transform: translateY(-1px); }
+  .fab svg { transition: transform .2s; }
+  .fab[aria-expanded=true] svg { transform: rotate(45deg); }
+  .pop {
+    width: 300px; max-width: calc(100vw - 60px); background: var(--card); border: 1px solid var(--line); border-radius: var(--radius);
+    padding: 16px 18px; box-shadow: var(--shadow-lg); border-top: 3px solid var(--gold); animation: rise .18s ease-out;
+  }
+  .pop[hidden] { display: none; }
+  .pop h4 { margin: 0 0 12px; font: 600 19px/1.2 var(--serif); }
+  .pop form.row label { flex: 1 1 100%; }
+  .pop form.row label.half { flex: 1 1 40%; }
+  .pop form.row button { flex: 1 1 100%; }
+  @keyframes rise { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+  .roomscroll {
+    flex: 1; min-height: 0; overflow: auto; border: 1px solid var(--line); border-radius: 22px;
+    background: #fffcf7; box-shadow: var(--shadow), inset 0 0 0 6px rgba(255, 255, 255, .7);
+  }
+  #room {
+    position: relative; min-width: 100%; min-height: 100%;
+    background-image:
+      radial-gradient(rgba(195, 160, 74, .28) 1px, transparent 1.2px),
+      radial-gradient(800px 500px at 50% 0%, rgba(255, 255, 255, .9), transparent 70%);
+    background-size: 26px 26px, 100% 100%;
+  }
+  .rt { position: absolute; cursor: grab; touch-action: none; user-select: none; transition: filter .2s; }
+  .rt:hover .tbody { box-shadow: 0 0 0 5px #fff, 0 0 0 6px rgba(195, 160, 74, .55), 0 14px 30px -10px rgba(74, 52, 40, .35); }
+  .rt.dragging { cursor: grabbing; z-index: 5; filter: drop-shadow(0 14px 18px rgba(74, 52, 40, .22)); }
+  .rt.swap-target .tbody { box-shadow: 0 0 0 5px #fff, 0 0 0 8px var(--gold-deep), 0 14px 30px -10px rgba(74, 52, 40, .35); }
+  .rt.sel { z-index: 4; }
+  .rt.ghost { cursor: default; z-index: 0; }
+  .ghost i {
+    position: absolute; left: 50%; top: 50%; width: 92px; height: 92px; margin: -46px 0 0 -46px; border-radius: 50%;
+    border: 2px dashed var(--line-strong); display: grid; place-items: center; color: var(--line-strong); font: normal 600 11px/1 var(--sans);
+    letter-spacing: .06em; text-transform: uppercase; transition: border-color .15s, background .15s, color .15s;
+  }
+  .ghost.swap-target i { border-color: var(--gold-deep); background: var(--gold-soft); color: var(--gold-deep); }
+  .slabel {
+    position: absolute; pointer-events: none; white-space: nowrap; max-width: 150px; overflow: hidden; text-overflow: ellipsis;
+    font-size: 11.5px; font-weight: 500; line-height: 1.5; padding: 1px 10px; border-radius: 999px; background: #fff; color: var(--ink);
+    border: 1px solid var(--bd); box-shadow: 0 4px 10px -3px rgba(74, 52, 40, .25);
+  }
+  .tbody {
+    position: absolute;
+    background: radial-gradient(circle at 50% 35%, #ffffff 0%, #fffaf0 55%, var(--gold-soft) 100%);
+    border: 1.5px solid var(--gold);
+    box-shadow: 0 0 0 5px #fff, 0 0 0 6px rgba(195, 160, 74, .35), 0 10px 24px -10px rgba(74, 52, 40, .3);
+    display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center;
+    line-height: 1.15; padding: 4px; overflow: hidden; transition: box-shadow .2s;
+  }
+  .rt.sel .tbody { box-shadow: 0 0 0 5px #fff, 0 0 0 8px var(--pink), 0 16px 34px -10px rgba(217, 114, 154, .55); }
+  .rt.over .tbody { outline: 2px dashed var(--pink); outline-offset: 10px; background: radial-gradient(circle, #fff, var(--pink-soft)); }
+  .tbody.round { border-radius: 50%; }
+  .tbody.rect { border-radius: 14px; }
+  .tbody b { font: 600 15px/1.05 var(--serif); color: var(--ink); overflow-wrap: anywhere; max-width: 100%; text-wrap: balance; }
+  .tbody small { color: var(--gold-deep); font-size: 10.5px; font-weight: 600; letter-spacing: .08em; margin-top: 2px; }
+  .seat {
+    position: absolute; width: 28px; height: 28px; border-radius: 50%;
+    border: 1.5px dashed #d9cbbf; background: rgba(255, 255, 255, .85); font-size: 10px; font-weight: 700; letter-spacing: .02em;
+    display: flex; align-items: center; justify-content: center; color: #4a3d40;
+    transition: transform .15s, opacity .2s;
+  }
+  .seat.filled {
+    border: 2px solid var(--bd); background: var(--bg-c); cursor: grab;
+    box-shadow: 0 0 0 2px #fff, 0 3px 8px -2px rgba(74, 52, 40, .3);
+  }
+  .seat.filled:hover { transform: scale(1.15); z-index: 3; }
+  .empty { color: var(--muted); text-align: center; padding: 28px 8px; font: italic 17px/1.4 var(--serif); }
+  .cap { font-size: 12.5px; color: var(--muted); }
+  .cap.full { color: var(--ok); font-weight: 600; }
+
+  /* convidados (direita) */
+  .side { display: flex; flex-direction: column; gap: 14px; overflow-y: auto; min-height: 0; padding: 2px 4px 4px 2px; }
+  .listcard { flex: 1 1 340px; min-height: 340px; display: flex; flex-direction: column; }
+  .listcard.over { outline: 2px dashed var(--pink); outline-offset: -6px; background: linear-gradient(var(--pink-soft), var(--card) 40%); }
+  .filters { display: flex; gap: 12px; align-items: center; margin-bottom: 10px; }
+  .filters input[type=search] {
+    flex: 1; padding-left: 34px; border-radius: 999px;
+    background: #fff url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='none' stroke='%238a7b7f' stroke-width='2' stroke-linecap='round' viewBox='0 0 24 24'%3E%3Ccircle cx='11' cy='11' r='7'/%3E%3Cpath d='m20 20-3.5-3.5'/%3E%3C/svg%3E") no-repeat 12px 50%;
+  }
+  .filters label { flex-direction: row; align-items: center; gap: 6px; white-space: nowrap; text-transform: none; letter-spacing: 0; font-size: 12.5px; cursor: pointer; }
+  ul.list { list-style: none; margin: 0; padding: 0; }
+  #guestList { flex: 1 1 0; min-height: 0; overflow-y: auto; margin: 0 -8px; padding: 0 4px; }
+  ul.list li {
+    display: flex; align-items: center; gap: 12px; padding: 8px 8px; border-radius: 12px;
+    border-bottom: 1px solid transparent; transition: background .15s;
+  }
+  ul.list li + li { box-shadow: 0 -1px 0 var(--line); }
+  ul.list li:hover { background: var(--bg-c, var(--bg)); box-shadow: none; }
+  ul.list li:hover + li { box-shadow: none; }
+  ul.list li button.icon { opacity: 0; }
+  ul.list li:hover button.icon, ul.list li button.icon:focus-visible { opacity: 1; }
+  #guestList li { cursor: grab; }
+  #guestList li:active { cursor: grabbing; }
+  #guestList li.placed .gname > span { opacity: .6; }
+  .dot {
+    width: 12px; height: 12px; border-radius: 50%; background: var(--bd, #aaa); flex: none;
+    box-shadow: 0 0 0 3px var(--bg-c, #eee);
+  }
+  .gname { flex: 1; min-width: 0; overflow-wrap: anywhere; line-height: 1.3; font-weight: 500; }
+  [data-editname] { cursor: text; border-radius: 6px; }
+  [data-editname]:hover { text-decoration: underline dotted var(--muted); text-underline-offset: 3px; }
+  .gbox { display: flex; flex-direction: column; gap: 5px; width: 100%; }
+  .gedit { width: 100%; font-weight: 500; padding: 4px 9px; border-radius: 8px; }
+  .gedit[data-f=group] { font-weight: 400; font-size: 13px; }
+  .gname small { display: block; color: var(--muted); font-size: 12px; font-weight: 400; }
+  .gname small b { color: var(--pink); font-weight: 600; }
+  .gfilter { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 10px; max-height: 100px; overflow-y: auto; flex: none; }
+  .fchip {
+    font: inherit; font-size: 12px; font-weight: 500; cursor: pointer; display: inline-flex; align-items: center; gap: 7px;
+    padding: 4px 11px; border-radius: 999px; border: 1px solid var(--bd, var(--line-strong)); background: #fff; color: var(--ink);
+    transition: background .15s, color .15s;
+  }
+  .fchip i { font-style: normal; font-weight: 600; font-size: 11px; color: var(--muted); }
+  .fchip:hover { background: var(--bg-c, var(--bg)); }
+  .fchip.active { background: var(--bd, var(--accent)); color: #fff; border-color: var(--bd, var(--accent)); box-shadow: 0 3px 8px -3px rgba(74, 52, 40, .35); }
+  .fchip.active i { color: rgba(255, 255, 255, .85); }
+  .seat.dim { opacity: .2; }
+  #guestList li, .seat.filled { -webkit-touch-callout: none; -webkit-user-select: none; user-select: none; }
+  #guestList li input { -webkit-user-select: text; user-select: text; }
+  .drag-src { opacity: .35; }
+  .dragghost {
+    position: fixed; z-index: 1000; left: 0; top: 0; pointer-events: none; white-space: nowrap;
+    padding: 6px 14px; border-radius: 999px; font-size: 13.5px; font-weight: 600; color: var(--ink);
+    background: var(--bg-c, #fff); border: 1.5px solid var(--bd, var(--accent)); box-shadow: var(--shadow-lg);
+    transform: translate(-50%, -130%) scale(1.04);
+  }
+  .sugg { flex: 1 1 100%; display: flex; flex-wrap: wrap; gap: 6px; align-items: center; }
+  .sugg:not(:empty)::before { content: 'Grupos existentes:'; font-size: 11.5px; color: var(--muted); margin-right: 2px; }
+  .gchip { font: inherit; font-size: 12px; cursor: pointer; padding: 3px 11px; border-radius: 999px; border: 1px solid var(--bd, #aaa); background: var(--bg-c, #eee); color: var(--ink); transition: transform .12s; }
+  .gchip:hover { transform: translateY(-1px); }
+  .err { color: var(--danger); font-size: 13px; margin: 8px 0 0; padding: 6px 10px; background: var(--pink-soft); border-radius: 10px; }
+  .err:empty { display: none; }
+
+  .sync { font-size: 12px; font-weight: 500; align-items: center; }
+  .sync.ok { color: var(--ok); border-color: rgba(63, 143, 110, .35); background: #f1f8f4; }
+  .sync.err { color: var(--danger); border-color: rgba(184, 50, 90, .35); background: var(--pink-soft); }
+
+  .side::-webkit-scrollbar, #guestList::-webkit-scrollbar, .roomscroll::-webkit-scrollbar, .gfilter::-webkit-scrollbar { width: 10px; height: 10px; }
+  .side::-webkit-scrollbar-thumb, #guestList::-webkit-scrollbar-thumb, .roomscroll::-webkit-scrollbar-thumb, .gfilter::-webkit-scrollbar-thumb {
+    background: var(--line-strong); border-radius: 999px; border: 3px solid transparent; background-clip: padding-box;
+  }
+
+  @media (max-width: 900px) {
+    body { height: auto; display: block; overflow-x: hidden; background-attachment: scroll; }
+    header { padding: 12px 16px; }
+    .app { display: block; padding: 12px; }
+    .stats { flex-basis: 100%; order: 3; }
+    .stage { height: 70vh; margin-bottom: 14px; }
+    .side { overflow: visible; }
+    .app.collapsed .side { display: none; }
+    ul.list li button.icon { opacity: 1; }
+  }
+  @media print {
+    form, button, select, input, aside, .addtable { display: none !important; }
+    body { height: auto; display: block; background: #fff; }
+    header { backdrop-filter: none; }
+    .roomscroll { overflow: visible; box-shadow: none; }
+    #room { zoom: 1 !important; }
+  }
+</style>
+</head>
+<body>
+<header>
+  <div class="top">
+    <div class="brand">
+      <span class="mono" aria-hidden="true">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="14" r="5.5"/><circle cx="15" cy="14" r="5.5"/><path d="M10.5 4.5 12 3l1.5 1.5L12 6.5z"/></svg>
+      </span>
+      <div>
+        <h1>O nosso <em>Casamento</em></h1>
+        <p>Convidados &amp; mesas</p>
+      </div>
+    </div>
+    <div class="stats" id="stats"></div>
+    <span class="stat mode" id="mode"></span>
+    <span class="stat sync" id="sync" title="Estado da sincronização"></span>
+  </div>
+</header>
+
+<main class="app" id="app">
+  <!-- SALA -->
+  <section class="stage">
+    <div class="roomwrap">
+      <div class="roomscroll"><div id="room"></div></div>
+      <div class="tablebar edit-only" id="tableBar" hidden>
+        <span class="tn" id="tbName"></span>
+        <button type="button" data-tb="rename" aria-label="Mudar o nome da mesa" title="Mudar o nome">
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20h4L19 9l-4-4L4 16z"/><path d="m13.5 6.5 4 4"/></svg>
+        </button>
+        <span class="sep"></span>
+        <button type="button" data-tb="minus" aria-label="Menos um lugar" title="Menos um lugar">−</button>
+        <button type="button" data-tb="seats" class="ts" id="tbSeats" aria-label="Definir o número de lugares" title="Definir o número de lugares"></button>
+        <button type="button" data-tb="plus" aria-label="Mais um lugar" title="Mais um lugar">+</button>
+        <span class="sep"></span>
+        <button type="button" data-tb="delete" class="danger" aria-label="Apagar a mesa" title="Apagar a mesa">
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h16M10 11v6M14 11v6M6 7l1 13h10l1-13M9 7V4h6v3"/></svg>
+        </button>
+      </div>
+      <button type="button" class="panelbtn" id="panelBtn" aria-expanded="true" aria-controls="side" title="Esconder o menu">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 6 6 6-6 6"/></svg>
+      </button>
+      <div class="addtable" id="addTable">
+        <div class="pop edit-only" id="tablePop" hidden>
+          <h4>Nova mesa</h4>
+          <form class="row" id="tableForm">
+            <label>Nome
+              <input name="name" placeholder="Ex.: Mesa 1" autocomplete="off">
+            </label>
+            <label>Forma
+              <select name="shape">
+                <option value="round">Redonda</option>
+                <option value="rect">Retangular</option>
+              </select>
+            </label>
+            <button class="btn gold" type="submit">Adicionar</button>
+          </form>
+        </div>
+        <div class="fabrow">
+          <div class="zoomctl" role="group" aria-label="Zoom da sala">
+            <button type="button" id="zoomOut" aria-label="Afastar" title="Afastar">−</button>
+            <button type="button" id="zoomVal" title="Repor 100%">100%</button>
+            <button type="button" id="zoomIn" aria-label="Aproximar" title="Aproximar">+</button>
+          </div>
+          <button type="button" class="toggle" id="namesToggle" aria-pressed="false" title="Mostrar o nome de todos os convidados nas mesas">
+            <span class="sw" aria-hidden="true"></span>Nomes
+          </button>
+          <button type="button" class="fab edit-only" id="fab" aria-expanded="false" aria-controls="tablePop">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>
+            Adicionar mesa
+          </button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CONVIDADOS -->
+  <aside class="side" id="side">
+    <div class="card edit-only">
+      <h3><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="10" cy="8" r="4"/><path d="M3 20c0-3.5 3.1-6 7-6s7 2.5 7 6"/><path d="M19 8v6M16 11h6"/></svg>Adicionar convidado</h3>
+      <form class="row" id="guestForm">
+        <label>Nome
+          <input name="name" required placeholder="Ex.: Maria Silva" autocomplete="off">
+        </label>
+        <label>Grupo
+          <input name="group" list="groups" placeholder="Ex.: Família da noiva" autocomplete="off">
+          <datalist id="groups"></datalist>
+        </label>
+        <button class="btn" type="submit">Adicionar</button>
+        <div class="sugg" data-sugg></div>
+      </form>
+      <p class="err" id="guestErr" role="alert"></p>
+      <details>
+        <summary>Adicionar vários de uma vez</summary>
+        <form id="bulkForm">
+          <textarea name="names" placeholder="Um nome por linha"></textarea>
+          <label>Grupo (para todos)
+            <input name="group" list="groups" placeholder="Opcional" autocomplete="off">
+          </label>
+          <div class="sugg" data-sugg style="margin-top:6px"></div>
+          <p><button class="btn" type="submit">Adicionar todos</button></p>
+          <p class="err" id="bulkErr" role="alert"></p>
+        </form>
+      </details>
+    </div>
+
+        <div class="card listcard" id="unassignedDrop">
+      <h3><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20c0-3.3 2.9-5.5 6.5-5.5s6.5 2.2 6.5 5.5"/><path d="M16 4.5a3.5 3.5 0 0 1 0 7M18 14.8c2 .7 3.5 2.6 3.5 5.2"/></svg>Convidados <span class="count" id="guestCount">0</span></h3>
+      <div class="filters">
+        <input type="search" id="search" placeholder="Pesquisar…" aria-label="Pesquisar convidados">
+        <label><input type="checkbox" id="onlyFree"> Só sem mesa</label>
+      </div>
+      <div class="gfilter" id="groupFilter"></div>
+      <ul class="list" id="guestList"></ul>
+    </div>
+
+  </aside>
+</main>
+
+<script>window.ADMIN = /*__ADMIN__*/null;</script>
+<script type="module">
+import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js';
+import { initializeFirestore, persistentLocalCache, doc, onSnapshot, setDoc, writeBatch } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js';
+
+const firebaseConfig = {
+  apiKey: 'AIzaSyAxo0aLpfqn1OB1IN24Xs7Vh8KYg6RMURc',
+  authDomain: 'casamento-mesas-b2w5aw.firebaseapp.com',
+  projectId: 'casamento-mesas-b2w5aw',
+  appId: '1:828050989204:web:62f59f8822659d1dd31481',
+};
+const DOC_PATH = ['casamento', 'k987sl0x99e39fh5rjpza60pnnacb2rk'];
+const KEY = 'casamento-convidados-v1';
+// /admin injecta { path } com o documento-chave; a página normal fica sem ele e só consegue ler
+const ADMIN = window.ADMIN;
+const EDIT = !!ADMIN;
+document.body.classList.toggle('view', !EDIT);
+document.getElementById('mode').textContent = EDIT ? 'Modo edição' : 'Só visualização';
+
+function load() {
+  try {
+    const s = JSON.parse(localStorage.getItem(KEY));
+    if (s && Array.isArray(s.guests) && Array.isArray(s.tables)) return s;
+  } catch {}
+  return { guests: [], tables: [] };
+}
+function save() {
+  if (!EDIT) return;
+  try { localStorage.setItem(KEY, JSON.stringify(state)); } catch {}
+  schedulePush();
+}
+
+/* ---------- sincronização (Firestore) ---------- */
+const db = initializeFirestore(initializeApp(firebaseConfig), { localCache: persistentLocalCache() });
+const ref = doc(db, ...DOC_PATH);
+const sync = { timer: null, pending: 0, retries: 0 };
+
+function setStatus(s, detail) {
+  const b = document.getElementById('sync');
+  const labels = { ok: '☁ Sincronizado', saving: '☁ A guardar…', err: '☁ Erro' + (detail ? ': ' + detail : '') };
+  b.textContent = labels[s];
+  b.classList.toggle('ok', s === 'ok');
+  b.classList.toggle('err', s === 'err');
+}
+
+/* Só quem abre o /admin consegue escrever. As regras do Firestore só aceitam uma escrita em `ref`
+   se trouxer o campo `tok` igual ao `next` atual do documento-chave (que só o /admin conhece),
+   e cada escrita roda esse `next`. Quem só tem o link normal lê, mas não consegue escrever. */
+const refAdmin = EDIT ? doc(db, ...ADMIN.path.split('/')) : null;
+let adminNext = null;
+const rnd = () => crypto.randomUUID().replace(/-/g, '') + crypto.randomUUID().replace(/-/g, '');
+if (EDIT) {
+  onSnapshot(refAdmin, (snap) => {
+    if (snap.exists()) adminNext = snap.data().next;
+    else setDoc(refAdmin, { next: rnd() }).catch((e) => setStatus('err', e.code || e.message));
+  }, (e) => setStatus('err', e.code || e.message));
+}
+
+function schedulePush() {
+  clearTimeout(sync.timer);
+  setStatus('saving');
+  sync.timer = setTimeout(push, 400);
+}
+
+async function push() {
+  if (!EDIT) return;
+  if (adminNext === null) { sync.timer = setTimeout(push, 300); return; } // ainda a ler o documento-chave
+  sync.timer = null;
+  sync.pending++;
+  try {
+    const batch = writeBatch(db);
+    batch.set(refAdmin, { next: rnd() });
+    batch.set(ref, { ...JSON.parse(JSON.stringify(state)), tok: adminNext });
+    await batch.commit();
+    sync.retries = 0;
+    if (--sync.pending === 0) setStatus('ok');
+  } catch (e) {
+    sync.pending--;
+    // duas pessoas a editar ao mesmo tempo: o token mudou entretanto, volta a tentar com o novo
+    if (e.code === 'permission-denied' && sync.retries++ < 4) { sync.timer = setTimeout(push, 700); return; }
+    setStatus('err', e.code || e.message);
+  }
+}
+
+// recebe alterações feitas noutros dispositivos em tempo real
+onSnapshot(ref, (snap) => {
+  if (snap.metadata.hasPendingWrites) return;
+  if (!snap.exists()) { if (EDIT && (state.guests.length || state.tables.length)) push(); else setStatus('ok'); return; }
+  const { tok, ...data } = snap.data();
+  if (!Array.isArray(data.guests) || !Array.isArray(data.tables)) return;
+  if (JSON.stringify(data) !== JSON.stringify(state) && !drag && !ui.renaming && !ui.touching && !sync.timer) {
+    state = data;
+    if (migrateGrid() && EDIT) save();
+    try { localStorage.setItem(KEY, JSON.stringify(state)); } catch {}
+    if (!table(ui.selected)) ui.selected = null;
+    render();
+  }
+  if (EDIT && migrateSeats()) { save(); render(); }
+  if (!sync.pending) setStatus('ok');
+}, (e) => setStatus('err', e.code || e.message));
+
+const GRID_X = 190, GRID_Y = 100; // grelha fixa das mesas (ver freeSlot)
+let state = load();
+migrateGrid();
+let zoom = 1;
+try { zoom = Math.min(2, Math.max(0.4, parseFloat(localStorage.getItem('casamento-zoom')) || 1)); } catch {}
+let spread = { x: 1, y: 1 };
+let showNames = false;
+try { showNames = localStorage.getItem('casamento-nomes') === '1'; } catch {}
+const ui = { search: '', onlyFree: false, group: null, selected: null };
+const NO_GROUP = '__none__';
+const inGroup = (g) => ui.group === null || (ui.group === NO_GROUP ? !g.group : g.group === ui.group);
+
+const $ = (s) => document.querySelector(s);
+const uid = () => Date.now().toString(36) + Math.random().toString(36).slice(2, 7);
+const esc = (s) => String(s).replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+const collator = new Intl.Collator('pt', { sensitivity: 'base' });
+
+const guest = (id) => state.guests.find((g) => g.id === id);
+const table = (id) => state.tables.find((t) => t.id === id);
+const seated = (tid) => state.guests.filter((g) => g.tableId === tid).sort(byLastName);
+const surname = (n) => n.trim().split(/\s+/).pop();
+const byLastName = (a, b) => collator.compare(surname(a.name), surname(b.name)) || collator.compare(a.name, b.name);
+const initials = (n) => n.trim().split(/\s+/).map((w) => w[0]).slice(0, 2).join('').toUpperCase();
+
+// paleta dos grupos: turquesa, dourado, rosa e tons a condizer
+const PALETTE = [
+  { bd: '#3a9a93', bg: '#dcefec' }, // turquesa
+  { bd: '#c9a64a', bg: '#f6ecc9' }, // dourado
+  { bd: '#d9739a', bg: '#f8dfe8' }, // rosa
+  { bd: '#5b8aa8', bg: '#e0ebf2' }, // azul
+  { bd: '#d98a6e', bg: '#f7e1d7' }, // coral
+  { bd: '#9a82b8', bg: '#ebe3f3' }, // lilás
+  { bd: '#77a37a', bg: '#e3efde' }, // verde
+  { bd: '#b58a4c', bg: '#f0e2cb' }, // bronze
+];
+function colors(group) {
+  if (!group) return { bd: '#a09296', bg: '#efe9e6' };
+  const saved = (state.groupColors || []).find((x) => x.group === group);
+  if (saved) return PALETTE[saved.idx % PALETTE.length];
+  let h = 0;
+  for (const c of group.toLowerCase()) h = (h * 31 + c.charCodeAt(0)) % 997;
+  return PALETTE[h % PALETTE.length];
+}
+// cada grupo novo fica com a primeira cor ainda por usar (e mantém-na)
+function ensureGroupColor(group) {
+  if (!group) return;
+  state.groupColors = state.groupColors || [];
+  if (state.groupColors.some((x) => x.group === group)) return;
+  const used = new Set(state.groupColors.map((x) => x.idx));
+  const free = PALETTE.findIndex((_, i) => !used.has(i));
+  state.groupColors.push({ group, idx: free >= 0 ? free : state.groupColors.length % PALETTE.length });
+}
+const colorStyle = (g) => { const c = colors(g.group); return `--bd:${c.bd};--bg-c:${c.bg}`; };
+
+/* ---------- ações ---------- */
+const norm = (s) => s.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase().replace(/\s+/g, ' ').trim();
+const clean = (s) => s.trim().replace(/\s+/g, ' ');
+const nameTaken = (name) => state.guests.some((g) => norm(g.name) === norm(name));
+
+// usa a grafia de um grupo já existente (ignora maiúsculas e acentos)
+function canonGroup(group) {
+  group = clean(group || '');
+  const k = norm(group);
+  return state.guests.map((g) => g.group).find((x) => x && norm(x) === k) || group;
+}
+
+// devolve uma mensagem de erro, ou null se adicionou
+function addGuest(name, group) {
+  name = clean(name);
+  if (!name) return 'Indique um nome.';
+  if (nameTaken(name)) return `“${name}” já está na lista.`;
+  const grp = canonGroup(group);
+  ensureGroupColor(grp);
+  state.guests.push({ id: uid(), name, group: grp, tableId: null });
+  return null;
+}
+
+function renderSugg(form) {
+  const box = form.querySelector('[data-sugg]');
+  if (!box) return;
+  const q = norm(form.group.value);
+  const groups = [...new Set(state.guests.map((g) => g.group).filter(Boolean))]
+    .filter((g) => norm(g) !== q && (!q || norm(g).includes(q)))
+    .sort(collator.compare);
+  box.innerHTML = groups.map((g) => `<button type="button" class="gchip" data-action="pickGroup" data-group="${esc(g)}" style="--bd:${colors(g).bd};--bg-c:${colors(g).bg}">${esc(g)}</button>`).join('');
+}
+
+function removeGuest(id) {
+  const g = guest(id);
+  if (!g || !confirm(`Remover ${g.name}?`)) return;
+  const t = table(g.tableId);
+  state.guests = state.guests.filter((x) => x.id !== id);
+  fitSeats(t);
+  commit();
+}
+
+/* uma mesa começa com 9 lugares e cresce até 12 conforme se sentam pessoas */
+const MIN_SEATS = 9, MAX_SEATS = 12;
+function fitSeats(t) {
+  if (t && !t.manual && t.seats > MIN_SEATS) t.seats = Math.min(t.seats, Math.max(MIN_SEATS, seated(t.id).length));
+}
+
+// migração única: mesas criadas antes da regra 9–12 passam a ter max(9, nº de sentados) lugares
+function migrateSeats() {
+  if (!EDIT || state.seatsRule === 2) return false;
+  state.tables.forEach((t) => { t.seats = Math.max(MIN_SEATS, seated(t.id).length); });
+  state.seatsRule = 2;
+  return true;
+}
+
+function addTable(name, shape) {
+  const n = state.tables.length;
+  const id = uid();
+  ui.selected = id;
+  state.tables.push({
+    id,
+    name: name.trim() || `Mesa ${n + 1}`,
+    seats: MIN_SEATS,
+    shape,
+    ...freeSlot(),
+  });
+}
+
+/* A sala é um retângulo com as mesas em trios intercalados: 2 nas pontas, 1 no meio mais à frente, 2 nas pontas,
+   1 no meio... Cada mesa tem o seu sítio fixo e só se trocam convidados entre mesas. (x, y) é o canto da mesa,
+   sempre múltiplo de GRID_X/GRID_Y; as filas pares têm só a mesa do meio, as ímpares as duas das pontas. */
+function gridPos(col, row) { return { x: col * GRID_X, y: row * GRID_Y }; }
+// todos os sítios da grelha sem mesa (as mesas "fantasma" onde se pode largar uma mesa)
+function ghostSlots() {
+  const taken = new Set(state.tables.map((t) => `${t.x},${t.y}`));
+  const rows = Math.max(12, ...state.tables.map((t) => Math.round(t.y / GRID_Y) + 1));
+  const out = [];
+  for (let row = 0; row < rows; row++) {
+    for (const col of row % 2 ? [0, 2] : [1]) {
+      const p = gridPos(col, row);
+      if (!taken.has(`${p.x},${p.y}`)) out.push(p);
+    }
+  }
+  return out;
+}
+function freeSlot() {
+  const taken = new Set(state.tables.map((t) => `${t.x},${t.y}`));
+  for (let row = 0; ; row++) {
+    for (const col of row % 2 ? [0, 2] : [1]) {
+      const p = gridPos(col, row);
+      if (!taken.has(`${p.x},${p.y}`)) return p;
+    }
+  }
+}
+// migração única: as mesas passam para o desenho em trios, mantendo a coluna e a ordem de cima para baixo
+function migrateGrid() {
+  if (state.gridRule === 2) return false;
+  const ts = state.tables;
+  if (ts.length) {
+    const xs = ts.map((t) => t.x), lo = Math.min(...xs), span = Math.max(...xs) - lo || 1;
+    const cols = [[], [], []];
+    ts.forEach((t) => cols[Math.round(((t.x - lo) / span) * 2)].push(t));
+    cols.forEach((c, ci) => c.sort((a, b) => a.y - b.y).forEach((t, k) => Object.assign(t, gridPos(ci, ci === 1 ? 2 * k : 2 * k + 1))));
+  }
+  state.gridRule = 2;
+  return true;
+}
+
+
+function assign(guestId, tableId) {
+  const g = guest(guestId);
+  if (!g) return;
+  const from = table(g.tableId);
+  if (tableId) {
+    const t = table(tableId);
+    if (!t) return;
+    if (g.tableId !== tableId && seated(tableId).length >= t.seats) {
+      if (t.manual || t.seats >= MAX_SEATS) {
+        alert(`${t.name} está cheia (${t.seats} lugares).`);
+        render();
+        return;
+      }
+      t.seats++;
+    }
+    g.tableId = tableId;
+  } else {
+    g.tableId = null;
+  }
+  fitSeats(from);
+  commit();
+}
+
+function commit() { save(); render(); }
+
+/* margem à esquerda/topo da sala, para os nomes de uma mesa junto ao limite não ficarem cortados */
+const OX = 130, OY = 72;
+
+// etiqueta com o nome ao lado do lugar (só na mesa selecionada)
+// posição de uma etiqueta e fração da sua própria largura/altura a recuar (translate)
+function labelGeom(s) {
+  const cx = s.x + 14, cy = s.y + 14;
+  if (s.a !== undefined) {
+    const c = Math.cos(s.a), n = Math.sin(s.a);
+    if (Math.abs(c) >= 0.35) {
+      // lados: nome ao lado do lugar, à mesma altura
+      return { x: cx + (c > 0 ? 20 : -20), y: cy, fx: c > 0 ? 0 : -1, fy: -0.5 };
+    }
+    // topo/fundo: nome por cima/baixo do lugar, a crescer para fora para dois vizinhos não se sobreporem
+    const side = Math.abs(c) < 0.12 ? 0 : Math.sign(c);
+    return { x: cx - side * 14, y: cy + (n < 0 ? -20 : 20), fx: side > 0 ? 0 : side < 0 ? -1 : -0.5, fy: n < 0 ? -1 : 0 };
+  }
+  return s.side === 'top'
+    ? { x: cx, y: s.y - 4, fx: -0.5, fy: -1 }
+    : { x: cx, y: s.y + 32, fx: -0.5, fy: 0 };
+}
+function seatLabel(s, g) {
+  const q = labelGeom(s);
+  return `<div class="slabel" style="left:${q.x}px;top:${q.y}px;transform:translate(${q.fx * 100}%,${q.fy * 100}%);${colorStyle(g)}">${esc(g.name)}</div>`;
+}
+
+/* Com os nomes completos as mesas ocupam mais espaço. As posições guardadas (t.x, t.y) são sempre as do modo
+   compacto; no modo "nomes" a sala é esticada (spread, um fator por eixo) o mínimo para nenhuma mesa se sobrepor.
+   Mover uma mesa num modo converte a posição para o outro, por isso os dois ficam sempre em sintonia
+   e, ao desligar os nomes, tudo volta ao sítio. */
+const LABEL_H = 21;
+const labelW = (g) => Math.min(150, 20 + g.name.length * 6.4); // estimativa (letra de 11.5px)
+function tableBox(t) {
+  const L = layout(t, true), people = seated(t.id);
+  let l = 0, tp = 0, r = L.w, b = L.h;
+  L.seats.forEach((s, i) => {
+    const g = people[i];
+    if (!g) return;
+    const q = labelGeom(s), w = labelW(g);
+    const x0 = q.x + q.fx * w, y0 = q.y + q.fy * LABEL_H;
+    l = Math.min(l, x0); r = Math.max(r, x0 + w); tp = Math.min(tp, y0); b = Math.max(b, y0 + LABEL_H);
+  });
+  return { t, l, tp, r, b };
+}
+function computeSpread() {
+  if (!showNames) return { x: 1, y: 1 };
+  const PAD = 16, MAX = 4, boxes = state.tables.map(tableBox);
+  // fator mínimo para separar dois intervalos [la,ra] e [lb,rb] cujas origens são pa e pb
+  const need = (pa, la, ra, pb, lb, rb) =>
+    pb > pa ? (ra - lb + PAD) / (pb - pa) : pb < pa ? (rb - la + PAD) / (pa - pb) : Infinity;
+  // cada par de mesas tem de ficar separado na horizontal (fator x) OU na vertical (fator y)
+  const pairs = [];
+  for (let i = 0; i < boxes.length; i++) {
+    for (let j = i + 1; j < boxes.length; j++) {
+      const a = boxes[i], c = boxes[j];
+      pairs.push([need(a.t.x, a.l, a.r, c.t.x, c.l, c.r), need(a.t.y, a.tp, a.b, c.t.y, c.tp, c.b)]);
+    }
+  }
+  // escolhe o fator x (entre os que resolvem algum par) que dá o menor ky, e fica com a menor área
+  let best = null;
+  for (const kx of new Set([1, ...pairs.map(([nx]) => nx).filter((n) => n > 1 && n <= MAX)])) {
+    const ky = Math.min(MAX, Math.max(1, ...pairs.filter(([nx]) => nx > kx).map(([, ny]) => ny)));
+    if (!best || kx * ky < best.x * best.y) best = { x: kx, y: ky };
+  }
+  return best;
+}
+
+/* ---------- geometria da mesa ---------- */
+function layout(t, wide = false) {
+  const n = t.seats, S = 28;
+  if (t.shape === 'rect') {
+    // mesa retangular (ex.: noivos): todos os lugares no lado de cima, virados para a sala
+    const w = Math.max(120, n * (wide ? 104 : 34) + 10), h = 56 + 8 + S;
+    const seats = [];
+    for (let i = 0; i < n; i++) seats.push({ x: (w / n) * (i + 0.5) - S / 2, y: 0, side: 'top' });
+    return { w, h, seats, body: { x: 0, y: S + 8, w, h: 56 } };
+  }
+  const rs = Math.max(52, (n * 34) / (2 * Math.PI));
+  const size = 2 * (rs + S / 2), c = size / 2, br = rs - 18;
+  const seats = [];
+  for (let i = 0; i < n; i++) {
+    const a = -Math.PI / 2 + (2 * Math.PI * i) / n;
+    seats.push({ x: c + rs * Math.cos(a) - S / 2, y: c + rs * Math.sin(a) - S / 2, a });
+  }
+  return { w: size, h: size, seats, body: { x: c - br, y: c - br, w: 2 * br, h: 2 * br } };
+}
+
+/* ---------- render ---------- */
+
+function renderStats() {
+  const total = state.guests.length;
+  const placed = state.guests.filter((g) => g.tableId).length;
+  const seats = state.tables.reduce((s, t) => s + t.seats, 0);
+  const pct = total ? Math.round((placed / total) * 100) : 0;
+  $('#stats').innerHTML = `
+    <span class="stat"><b>${total}</b> convidados</span>
+    <span class="stat progress"><span class="row1"><span>${placed} sentados · ${total - placed} sem mesa</span><b>${pct}%</b></span><span class="bar"><span style="width:${pct}%"></span></span></span>
+    <span class="stat"><b>${state.tables.length}</b> mesas · <b>${seats}</b> lugares</span>`;
+}
+
+function renderGuests() {
+  const counts = new Map();
+  for (const g of state.guests) counts.set(g.group, (counts.get(g.group) || 0) + 1);
+  const groups = [...counts.keys()].filter(Boolean).sort(collator.compare);
+  $('#groups').innerHTML = groups.map((g) => `<option value="${esc(g)}">`).join('');
+  renderSugg($('#guestForm'));
+  renderSugg($('#bulkForm'));
+
+  if (ui.group && ui.group !== NO_GROUP && !counts.has(ui.group)) ui.group = null;
+  if (ui.group === NO_GROUP && !counts.has('')) ui.group = null;
+  const chip = (key, label, n, color, title) =>
+    `<button type="button" class="fchip ${ui.group === key ? 'active' : ''}" data-action="filterGroup" data-group="${esc(key ?? '')}" ${title ? `title="${esc(title)}"` : ''}
+      style="${color ? `--bd:${color.bd};--bg-c:${color.bg}` : ''}">${esc(label)} <i>${n}</i></button>`;
+  const seatedIn = (pred) => state.guests.filter((g) => pred(g) && g.tableId).length;
+  $('#groupFilter').innerHTML = groups.length
+    ? chip(null, 'Todos', state.guests.length) +
+      groups.map((g) => chip(g, g, counts.get(g), colors(g), `${counts.get(g)} pessoas, ${seatedIn((x) => x.group === g)} com mesa`)).join('') +
+      (counts.has('') ? chip(NO_GROUP, 'Sem grupo', counts.get(''), colors(''), `${counts.get('')} pessoas`) : '')
+    : '';
+
+  const q = norm(ui.search);
+  const list = state.guests
+    .filter((g) => inGroup(g) && (!ui.onlyFree || !g.tableId) && (!q || norm(g.name).includes(q) || norm(g.group).includes(q)))
+    .sort((a, b) => (!a.tableId === !b.tableId ? byLastName(a, b) : a.tableId ? 1 : -1));
+
+  $('#guestCount').textContent = list.length === state.guests.length ? state.guests.length : `${list.length} de ${state.guests.length}`;
+  $('#guestList').innerHTML = list.length
+    ? list.map((g) => {
+        const t = table(g.tableId);
+        const sub = [g.group ? (EDIT ? `<span data-editname="${g.id}" data-focus="group" title="Clique para editar o grupo">${esc(g.group)}</span>` : esc(g.group)) : '', t ? `<b>${esc(t.name)}</b>` : ''].filter(Boolean).join(' · ');
+        return `
+      <li ${EDIT ? `draggable="true" data-guest-drag="${g.id}"` : ''} class="${t ? 'placed' : ''}" style="${colorStyle(g)}">
+        <span class="dot"></span>
+        <span class="gname"><span ${EDIT ? `data-editname="${g.id}" title="Clique para editar o nome"` : ''}>${esc(g.name)}</span>${sub ? `<small>${sub}</small>` : ''}</span>
+        ${EDIT ? `<button class="icon" data-action="removeGuest" data-id="${g.id}" title="Remover" aria-label="Remover ${esc(g.name)}">✕</button>` : ''}
+      </li>`;
+      }).join('')
+    : `<li class="empty" style="display:block;cursor:default">${state.guests.length ? 'Nenhum resultado.' : EDIT ? 'Ainda não há convidados. Adicione o primeiro acima.' : 'Ainda não há convidados.'}</li>`;
+}
+
+function renderRoom() {
+  const room = $('#room');
+  let maxX = 0, maxY = 0;
+  spread = computeSpread();
+  const ghosts = EDIT ? ghostSlots().map((p) => {
+    const G = 132; // tamanho de uma mesa de 9 lugares
+    maxX = Math.max(maxX, p.x * spread.x + OX + G);
+    maxY = Math.max(maxY, p.y * spread.y + OY + G);
+    return `<div class="rt ghost" data-slot="${p.x},${p.y}" style="left:${p.x * spread.x + OX}px;top:${p.y * spread.y + OY}px;width:${G}px;height:${G}px"><i>livre</i></div>`;
+  }).join('') : '';
+  room.innerHTML = ghosts + state.tables.map((t) => {
+    const open = ui.selected === t.id;
+    const names = open || showNames;
+    const L = layout(t, names);
+    maxX = Math.max(maxX, t.x * spread.x + OX + L.w);
+    maxY = Math.max(maxY, t.y * spread.y + OY + L.h);
+    const people = seated(t.id);
+    const seatsHtml = L.seats.map((s, i) => {
+      const g = people[i];
+      return g
+        ? `<div class="seat filled ${inGroup(g) ? '' : 'dim'}" ${EDIT ? `draggable="true" data-guest-drag="${g.id}"` : ''} title="${esc(g.name)}" style="left:${s.x}px;top:${s.y}px;${colorStyle(g)}">${esc(initials(g.name))}</div>`
+        : `<div class="seat" style="left:${s.x}px;top:${s.y}px"></div>`;
+    }).join('') + (names ? L.seats.map((s, i) => (people[i] ? seatLabel(s, people[i]) : '')).join('') : '');
+    const b = L.body;
+    return `
+      <div class="rt ${open ? 'sel' : ''}" data-table="${t.id}" style="left:${t.x * spread.x + OX}px;top:${t.y * spread.y + OY}px;width:${L.w}px;height:${L.h}px">
+        <div class="tbody ${t.shape === 'rect' ? 'rect' : 'round'}" style="left:${b.x}px;top:${b.y}px;width:${b.w}px;height:${b.h}px">
+          <b${t.name.length > 12 ? ` style="font-size:${t.name.length > 20 ? 11.5 : 13}px"` : ''}>${esc(t.name)}</b><small>${people.length}/${t.seats}</small>
+        </div>
+        ${seatsHtml}
+      </div>`;
+  }).join('') || `<div class="empty" style="padding-top:80px">${EDIT ? 'Ainda não há mesas. Adicione a primeira com o botão por baixo.' : 'Ainda não há mesas.'}</div>`;
+  room.style.width = maxX ? maxX + 160 + 'px' : '';
+  room.style.height = maxY ? maxY + 80 + 'px' : '';
+  applyZoom();
+
+  if (!table(ui.selected)) ui.selected = null;
+  renderTableBar();
+}
+
+function render() {
+  renderStats();
+  renderGuests();
+  renderRoom();
+}
+
+/* ---------- eventos ---------- */
+document.addEventListener('click', (e) => {
+  const b = e.target.closest('[data-action]');
+  if (!b) return;
+  const id = b.dataset.id;
+  switch (b.dataset.action) {
+    case 'filterGroup': {
+      const key = b.dataset.group || null;
+      ui.group = key === ui.group ? null : key;
+      render();
+      break;
+    }
+    case 'pickGroup': { const f = b.closest('form'); f.group.value = b.dataset.group; renderSugg(f); break; }
+    case 'removeGuest': removeGuest(id); break;
+  }
+});
+
+
+$('#guestForm').addEventListener('submit', (e) => {
+  e.preventDefault();
+  const f = e.target;
+  const err = addGuest(f.name.value, f.group.value);
+  $('#guestErr').textContent = err || '';
+  if (err) { f.name.focus(); f.name.select(); return; }
+  f.name.value = '';
+  f.name.focus();
+  commit();
+});
+$('#guestForm').addEventListener('input', (e) => {
+  $('#guestErr').textContent = '';
+  if (e.target.name === 'group') renderSugg(e.currentTarget);
+});
+
+$('#bulkForm').addEventListener('submit', (e) => {
+  e.preventDefault();
+  const f = e.target;
+  const names = f.names.value.split('\n').map(clean).filter(Boolean);
+  const seen = new Set();
+  const dups = [];
+  for (const n of names) {
+    if (nameTaken(n) || seen.has(norm(n))) dups.push(n);
+    seen.add(norm(n));
+  }
+  if (dups.length) {
+    $('#bulkErr').textContent = `Já na lista (ou repetido): ${[...new Set(dups)].join(', ')}. Não foi adicionado ninguém.`;
+    return;
+  }
+  $('#bulkErr').textContent = '';
+  const group = canonGroup(f.group.value);
+  names.forEach((n) => addGuest(n, group));
+  f.reset();
+  commit();
+});
+$('#bulkForm').addEventListener('input', (e) => {
+  $('#bulkErr').textContent = '';
+  if (e.target.name === 'group') renderSugg(e.currentTarget);
+});
+
+$('#tableForm').addEventListener('submit', (e) => {
+  e.preventDefault();
+  const f = e.target;
+  addTable(f.name.value, f.shape.value);
+  f.name.value = '';
+  setPop(false);
+  commit();
+});
+
+/* esconder / mostrar o menu lateral (a sala fica maior) */
+function setPanel(open) {
+  $('#app').classList.toggle('collapsed', !open);
+  const b = $('#panelBtn');
+  b.setAttribute('aria-expanded', open);
+  b.title = open ? 'Esconder o menu' : 'Mostrar o menu';
+  try { localStorage.setItem('casamento-menu', open ? '1' : '0'); } catch {}
+}
+$('#panelBtn').addEventListener('click', () => setPanel($('#app').classList.contains('collapsed')));
+try { if (localStorage.getItem('casamento-menu') === '0') setPanel(false); } catch {}
+
+/* zoom da sala */
+function applyZoom() {
+  room.style.zoom = zoom;
+  // o tamanho mínimo é em coordenadas da sala, para os pontos de fundo cobrirem sempre a área visível
+  room.style.minWidth = 100 / zoom + '%';
+  room.style.minHeight = 100 / zoom + '%';
+  $('#zoomVal').textContent = Math.round(zoom * 100) + '%';
+  $('#zoomOut').disabled = zoom <= 0.4;
+  $('#zoomIn').disabled = zoom >= 2;
+}
+// muda o zoom mantendo o ponto (ax, ay) da área visível no mesmo sítio
+function setZoom(z, ax, ay) {
+  z = Math.min(2, Math.max(0.4, Math.round(z * 100) / 100));
+  if (z === zoom) return;
+  const sc = $('.roomscroll');
+  ax ??= sc.clientWidth / 2;
+  ay ??= sc.clientHeight / 2;
+  const cx = (sc.scrollLeft + ax) / zoom, cy = (sc.scrollTop + ay) / zoom;
+  zoom = z;
+  try { localStorage.setItem('casamento-zoom', String(z)); } catch {}
+  applyZoom();
+  sc.scrollLeft = cx * z - ax;
+  sc.scrollTop = cy * z - ay;
+}
+$('#zoomIn').addEventListener('click', () => setZoom(zoom + 0.1));
+$('#zoomOut').addEventListener('click', () => setZoom(zoom - 0.1));
+$('#zoomVal').addEventListener('click', () => setZoom(1));
+// Ctrl/Cmd + roda, ou pinça no trackpad
+$('.roomscroll').addEventListener('wheel', (e) => {
+  if (!e.ctrlKey && !e.metaKey) return;
+  e.preventDefault();
+  const r = e.currentTarget.getBoundingClientRect();
+  setZoom(zoom * Math.exp(-e.deltaY * 0.01), e.clientX - r.left, e.clientY - r.top);
+}, { passive: false });
+
+// pinça com dois dedos: faz zoom e acompanha o movimento dos dedos (arrastar a sala)
+{
+  const sc = $('.roomscroll');
+  let pinch = null;
+  const pts = (e) => {
+    const r = sc.getBoundingClientRect(), [a, b] = e.touches;
+    return { d: Math.hypot(a.clientX - b.clientX, a.clientY - b.clientY) || 1, x: (a.clientX + b.clientX) / 2 - r.left, y: (a.clientY + b.clientY) / 2 - r.top };
+  };
+  sc.addEventListener('touchstart', (e) => {
+    if (e.touches.length !== 2) return;
+    if (drag) { // o primeiro dedo estava a arrastar uma mesa: desfaz, é uma pinça
+      drag = null;
+      renderRoom();
+    }
+    const p = pts(e);
+    pinch = { d: p.d, z: zoom, cx: (sc.scrollLeft + p.x) / zoom, cy: (sc.scrollTop + p.y) / zoom };
+  }, { passive: true });
+  sc.addEventListener('touchmove', (e) => {
+    if (!pinch || e.touches.length !== 2) return;
+    e.preventDefault();
+    const p = pts(e);
+    zoom = Math.min(2, Math.max(0.4, pinch.z * p.d / pinch.d));
+    applyZoom();
+    sc.scrollLeft = pinch.cx * zoom - p.x;
+    sc.scrollTop = pinch.cy * zoom - p.y;
+  }, { passive: false });
+  const endPinch = (e) => {
+    if (!pinch || e.touches.length >= 2) return;
+    pinch = null;
+    zoom = Math.round(zoom * 100) / 100;
+    applyZoom();
+    try { localStorage.setItem('casamento-zoom', String(zoom)); } catch {}
+  };
+  sc.addEventListener('touchend', endPinch);
+  sc.addEventListener('touchcancel', endPinch);
+  // Safari/iOS: impede o zoom da página inteira
+  for (const t of ['gesturestart', 'gesturechange']) sc.addEventListener(t, (e) => e.preventDefault());
+}
+
+/* mostrar todos os nomes / só iniciais */
+function setNames(on) {
+  showNames = on;
+  try { localStorage.setItem('casamento-nomes', on ? '1' : '0'); } catch {}
+  $('#namesToggle').setAttribute('aria-pressed', on);
+  renderRoom();
+}
+$('#namesToggle').addEventListener('click', () => setNames(!showNames));
+$('#namesToggle').setAttribute('aria-pressed', showNames);
+
+/* botão "Adicionar mesa" */
+function setPop(open) {
+  $('#tablePop').hidden = !open;
+  $('#fab').setAttribute('aria-expanded', open);
+  if (open) $('#tableForm').name.focus();
+}
+$('#fab').addEventListener('click', () => setPop($('#tablePop').hidden));
+document.addEventListener('pointerdown', (e) => { if (!e.target.closest('#addTable')) setPop(false); });
+document.addEventListener('keydown', (e) => { if (e.key === 'Escape') setPop(false); });
+
+$('#search').addEventListener('input', (e) => { ui.search = e.target.value; renderGuests(); });
+$('#onlyFree').addEventListener('change', (e) => { ui.onlyFree = e.target.checked; renderGuests(); });
+
+/* tocar numa mesa seleciona-a; arrastá-la para cima de outra troca as duas de sítio (os sítios são fixos) */
+let drag = null;
+const room = $('#room');
+room.addEventListener('pointerdown', (e) => {
+  if (e.target.closest('.rename')) return;
+  const el = e.target.closest('.rt:not(.ghost)');
+  if (ui.renaming) document.activeElement.blur();
+  if (!el && ui.selected) { ui.selected = null; renderRoom(); return; }
+  if (!el || e.target.closest('.seat.filled')) return;
+  if (EDIT && e.target.closest('.tbody small') && ui.selected === el.dataset.table) { e.preventDefault(); startSeatsEdit(); return; }
+  const t = table(el.dataset.table);
+  drag = { el, t, sx: e.clientX, sy: e.clientY, l: el.offsetLeft, tp: el.offsetTop, moved: false, over: null };
+  el.setPointerCapture(e.pointerId);
+});
+room.addEventListener('pointermove', (e) => {
+  if (!drag || !EDIT) return;
+  const dx = e.clientX - drag.sx, dy = e.clientY - drag.sy;
+  if (!drag.moved && Math.hypot(dx, dy) < 4) return;
+  drag.moved = true;
+  drag.el.classList.add('dragging');
+  drag.el.style.left = drag.l + dx / zoom + 'px';
+  drag.el.style.top = drag.tp + dy / zoom + 'px';
+  const over = document.elementsFromPoint(e.clientX, e.clientY).map((x) => x.closest('.rt')).find((x) => x && x !== drag.el) || null;
+  if (over !== drag.over) {
+    drag.over?.classList.remove('swap-target');
+    over?.classList.add('swap-target');
+    drag.over = over;
+  }
+});
+const endDrag = (e) => {
+  if (!drag) return;
+  const { moved, t, over } = drag;
+  drag = null;
+  if (e.type === 'pointercancel') { renderRoom(); return; }
+  if (moved) {
+    const o = over && table(over.dataset.table);
+    if (over?.dataset.slot) { // sítio livre: a mesa muda para lá
+      [t.x, t.y] = over.dataset.slot.split(',').map(Number);
+      save();
+    } else if (o && o !== t) {
+      [t.x, o.x] = [o.x, t.x];
+      [t.y, o.y] = [o.y, t.y];
+      save();
+    }
+    renderRoom(); // sem troca, a mesa volta ao seu sítio
+  } else { ui.selected = ui.selected === t.id ? null : t.id; renderRoom(); }
+};
+room.addEventListener('pointerup', endDrag);
+room.addEventListener('pointercancel', endDrag);
+
+/* arrastar convidados */
+document.addEventListener('dragstart', (e) => {
+  if (drag) { e.preventDefault(); return; } // a arrastar uma mesa: o arrasto nativo de um lugar não entra
+  const el = e.target.closest?.('[data-guest-drag]');
+  if (!el) return;
+  e.dataTransfer.setData('text/plain', el.dataset.guestDrag);
+  e.dataTransfer.effectAllowed = 'move';
+});
+const dropTarget = (e) => e.target.closest?.('.rt, #unassignedDrop');
+const clearOver = () => document.querySelectorAll('.over').forEach((x) => x.classList.remove('over'));
+document.addEventListener('dragover', (e) => {
+  const el = dropTarget(e);
+  clearOver();
+  if (!el) return;
+  e.preventDefault();
+  el.classList.add('over');
+});
+document.addEventListener('drop', (e) => {
+  if (!EDIT) return;
+  const el = dropTarget(e);
+  clearOver();
+  if (!el) return;
+  e.preventDefault();
+  const id = e.dataTransfer.getData('text/plain');
+  if (!guest(id)) return;
+  assign(id, el.classList.contains('rt') ? el.dataset.table : null);
+});
+document.addEventListener('dragend', clearOver);
+
+/* clicar no nome (ou no grupo) de um convidado na lista: edita nome e grupo */
+function startGuestEdit(span) {
+  const g = guest(span.dataset.editname);
+  if (!g) return;
+  const cell = span.closest('.gname');
+  const box = document.createElement('div');
+  box.className = 'gbox';
+  box.innerHTML = `
+    <input class="gedit" data-f="name" maxlength="60" aria-label="Nome do convidado" value="${esc(g.name)}">
+    <input class="gedit" data-f="group" maxlength="60" list="groups" autocomplete="off" placeholder="Grupo" aria-label="Grupo do convidado" value="${esc(g.group || '')}">`;
+  const [nameIn, groupIn] = box.querySelectorAll('input');
+  let done = false;
+  const finish = (ok) => {
+    if (done) return;
+    done = true;
+    ui.renaming = false;
+    const name = clean(nameIn.value);
+    const group = canonGroup(groupIn.value);
+    if (!ok || !name || (name === g.name && group === (g.group || ''))) { renderGuests(); return; }
+    if (norm(name) !== norm(g.name) && nameTaken(name)) { alert(`“${name}” já está na lista.`); renderGuests(); return; }
+    g.name = name;
+    g.group = group;
+    ensureGroupColor(group);
+    commit();
+  };
+  box.addEventListener('keydown', (e) => {
+    e.stopPropagation();
+    if (e.key === 'Enter') finish(true);
+    else if (e.key === 'Escape') finish(false);
+  });
+  box.addEventListener('focusout', (e) => { if (!box.contains(e.relatedTarget)) finish(true); });
+  cell.closest('li').draggable = false; // senão não se consegue selecionar texto com o rato
+  cell.replaceChildren(box);
+  ui.renaming = true;
+  const first = span.dataset.focus === 'group' ? groupIn : nameIn;
+  first.focus();
+  first.select();
+}
+document.addEventListener('click', (e) => {
+  const span = e.target.closest('[data-editname]');
+  if (span && !ui.renaming) startGuestEdit(span);
+});
+
+/* escrever com uma mesa selecionada: edita o nome */
+function startRename(first, selectAll = false) {
+  const tb = $('#room .rt.sel .tbody');
+  if (!tb) return;
+  const t = table(ui.selected);
+  const input = document.createElement('input');
+  input.className = 'rename';
+  input.value = first;
+  input.maxLength = 40;
+  input.setAttribute('aria-label', 'Nome da mesa');
+  input.style.left = tb.offsetLeft + tb.offsetWidth / 2 + 'px';
+  input.style.top = tb.offsetTop + tb.offsetHeight / 2 + 'px';
+  let done = false;
+  const finish = (ok) => {
+    if (done) return;
+    done = true;
+    ui.renaming = false;
+    const name = clean(input.value);
+    if (ok && name && name !== t.name) { t.name = name; commit(); } else renderRoom();
+  };
+  input.addEventListener('keydown', (e) => {
+    e.stopPropagation();
+    if (e.key === 'Enter') finish(true);
+    else if (e.key === 'Escape') finish(false);
+  });
+  input.addEventListener('blur', () => finish(true));
+  ui.renaming = true;
+  tb.closest('.rt').append(input);
+  input.focus();
+  if (selectAll) input.select(); else input.setSelectionRange(input.value.length, input.value.length);
+}
+document.addEventListener('keydown', (e) => {
+  if (!EDIT || !ui.selected || ui.renaming || e.ctrlKey || e.metaKey || e.altKey || e.key.length !== 1) return;
+  if (e.target.closest?.('input, textarea, select, [contenteditable]')) return;
+  e.preventDefault();
+  startRename(e.key);
+});
+
+/* Delete / Backspace com uma mesa selecionada: apaga a mesa (pede confirmação se tiver convidados) */
+function removeTable(id, ask = false) {
+  const t = table(id);
+  if (!t) return;
+  const n = seated(id).length;
+  if ((n || ask) && !confirm(`Remover ${t.name}?${n ? ` Os ${n} convidados sentados ficam sem mesa.` : ''}`)) return;
+  state.guests.forEach((g) => { if (g.tableId === id) g.tableId = null; });
+  state.tables = state.tables.filter((x) => x.id !== id);
+  ui.selected = null;
+  commit();
+}
+document.addEventListener('keydown', (e) => {
+  if ((e.key !== 'Delete' && e.key !== 'Backspace') || !EDIT || !ui.selected || ui.renaming || e.ctrlKey || e.metaKey || e.altKey) return;
+  if (e.target.closest?.('input, textarea, select, [contenteditable]')) return;
+  e.preventDefault();
+  removeTable(ui.selected);
+});
+
+/* definir o número exato de lugares (vazio = volta ao automático: 9 a 12 conforme se sentam pessoas) */
+function startSeatsEdit() {
+  const tb = $('#room .rt.sel .tbody');
+  const t = table(ui.selected);
+  if (!tb || !t) return;
+  const { min, max } = seatLimits(t);
+  const input = document.createElement('input');
+  input.className = 'rename seatsedit';
+  input.type = 'number';
+  input.inputMode = 'numeric';
+  input.min = min; input.max = max;
+  input.value = t.seats;
+  input.placeholder = 'auto';
+  input.setAttribute('aria-label', 'Número de lugares');
+  input.style.left = tb.offsetLeft + tb.offsetWidth / 2 + 'px';
+  input.style.top = tb.offsetTop + tb.offsetHeight / 2 + 'px';
+  let done = false;
+  const finish = (ok) => {
+    if (done) return;
+    done = true;
+    ui.renaming = false;
+    if (!ok) { renderRoom(); return; }
+    const n = input.valueAsNumber;
+    if (Number.isNaN(n)) { // vazio: automático
+      delete t.manual;
+      t.seats = Math.max(MIN_SEATS, seated(t.id).length);
+    } else {
+      t.seats = Math.min(max, Math.max(min, Math.round(n)));
+      t.manual = true;
+    }
+    commit();
+  };
+  input.addEventListener('keydown', (e) => {
+    e.stopPropagation();
+    if (e.key === 'Enter') finish(true);
+    else if (e.key === 'Escape') finish(false);
+  });
+  input.addEventListener('blur', () => finish(true));
+  ui.renaming = true;
+  tb.closest('.rt').append(input);
+  input.focus();
+  input.select();
+}
+// Enter com uma mesa selecionada: definir o número de lugares
+document.addEventListener('keydown', (e) => {
+  if (e.key !== 'Enter' || !EDIT || !ui.selected || ui.renaming || e.ctrlKey || e.metaKey || e.altKey) return;
+  if (e.target.closest?.('input, textarea, select, button, [contenteditable]')) return;
+  e.preventDefault();
+  startSeatsEdit();
+});
+
+/* setas com uma mesa selecionada: mais / menos lugares */
+// mexer nos lugares à mão fixa o número (sem crescer/encolher sozinha): de 1 (ou nº de sentados) a 40
+const seatLimits = (t) => ({ min: Math.max(1, seated(t.id).length), max: 40 });
+function changeSeats(t, delta) {
+  const { min, max } = seatLimits(t);
+  const seats = Math.min(max, Math.max(min, t.seats + delta));
+  if (seats !== t.seats) { t.seats = seats; t.manual = true; commit(); }
+}
+// barra da mesa selecionada (ecrãs tácteis)
+$('#tableBar').addEventListener('click', (e) => {
+  const b = e.target.closest('[data-tb]');
+  const t = table(ui.selected);
+  if (!b || !t) return;
+  switch (b.dataset.tb) {
+    case 'rename': if (!ui.renaming) startRename(t.name, true); break;
+    case 'seats': if (!ui.renaming) startSeatsEdit(); break;
+    case 'minus': changeSeats(t, -1); break;
+    case 'plus': changeSeats(t, 1); break;
+    case 'delete': removeTable(t.id, true); break;
+  }
+});
+function renderTableBar() {
+  if (!EDIT) return;
+  const t = table(ui.selected), bar = $('#tableBar');
+  bar.hidden = !t;
+  if (!t) return;
+  const { min, max } = seatLimits(t);
+  $('#tbName').textContent = t.name;
+  $('#tbSeats').textContent = `${seated(t.id).length}/${t.seats}`;
+  bar.querySelector('[data-tb=minus]').disabled = t.seats <= min;
+  bar.querySelector('[data-tb=plus]').disabled = t.seats >= max;
+}
+document.addEventListener('keydown', (e) => {
+  if ((e.key !== 'ArrowUp' && e.key !== 'ArrowDown') || !EDIT || !ui.selected || ui.renaming || e.ctrlKey || e.metaKey || e.altKey) return;
+  if (e.target.closest?.('input, textarea, select, [contenteditable]')) return;
+  const t = table(ui.selected);
+  if (!t) return;
+  e.preventDefault();
+  changeSeats(t, e.key === 'ArrowUp' ? 1 : -1);
+});
+
+/* arrastar convidados com o dedo (o drag-and-drop do HTML não funciona em ecrãs tácteis):
+   na lista, segurar um instante e arrastar; nos lugares da mesa, arrastar logo */
+let td = null;
+const tdTarget = (t) => document.elementFromPoint(t.x, t.y)?.closest('.rt, #unassignedDrop');
+function tdBegin() {
+  if (!td || td.active) return;
+  const g = guest(td.id);
+  if (!g) { td = null; return; }
+  td.active = true;
+  ui.touching = true;
+  td.el.classList.add('drag-src');
+  td.ghost = document.createElement('div');
+  td.ghost.className = 'dragghost';
+  td.ghost.style.cssText = colorStyle(g);
+  td.ghost.textContent = g.name;
+  document.body.append(td.ghost);
+  tdMove();
+  navigator.vibrate?.(12);
+  (function loop() {
+    if (!td?.active) return;
+    const sc = $('.roomscroll'), r = sc.getBoundingClientRect(), E = 60, V = 12;
+    if (td.y < E) window.scrollBy(0, -V); else if (td.y > innerHeight - E) window.scrollBy(0, V);
+    if (td.x > r.left && td.x < r.right && td.y > r.top && td.y < r.bottom) {
+      if (td.x < r.left + E) sc.scrollLeft -= V; else if (td.x > r.right - E) sc.scrollLeft += V;
+      if (td.y < r.top + E) sc.scrollTop -= V; else if (td.y > r.bottom - E) sc.scrollTop += V;
+    }
+    td.raf = requestAnimationFrame(loop);
+  })();
+}
+function tdMove() {
+  td.ghost.style.left = td.x + 'px';
+  td.ghost.style.top = td.y + 'px';
+  clearOver();
+  tdTarget(td)?.classList.add('over');
+}
+function tdEnd(drop) {
+  const t = td;
+  if (!t) return;
+  clearTimeout(t.timer);
+  cancelAnimationFrame(t.raf);
+  td = null;
+  t.el.draggable = true;
+  if (!t.active) return;
+  const target = drop ? tdTarget(t) : null;
+  t.ghost.remove();
+  t.el.classList.remove('drag-src');
+  clearOver();
+  ui.touching = false;
+  if (target) assign(t.id, target.classList.contains('rt') ? target.dataset.table : null);
+}
+document.addEventListener('touchstart', (e) => {
+  if (td) tdEnd(false);
+  if (e.touches.length !== 1) return;
+  const el = e.target.closest?.('[data-guest-drag]');
+  if (!el || e.target.closest('button, input')) return;
+  const p = e.touches[0];
+  td = { id: el.dataset.guestDrag, el, sx: p.clientX, sy: p.clientY, x: p.clientX, y: p.clientY, active: false };
+  el.draggable = false; // evita o arrasto nativo, que entra em conflito
+  if (!el.classList.contains('seat')) td.timer = setTimeout(tdBegin, 250);
+}, { passive: true });
+document.addEventListener('touchmove', (e) => {
+  if (!td) return;
+  const p = e.touches[0];
+  td.x = p.clientX; td.y = p.clientY;
+  if (!td.active) {
+    const d = Math.hypot(td.x - td.sx, td.y - td.sy);
+    if (td.el.classList.contains('seat')) { if (d > 6) tdBegin(); }
+    else if (d > 8) tdEnd(false); // o dedo mexeu antes do tempo: é para fazer scroll
+    if (!td?.active) return;
+  }
+  e.preventDefault();
+  tdMove();
+}, { passive: false });
+document.addEventListener('touchend', (e) => {
+  if (!td) return;
+  if (td.active) e.preventDefault(); // não deixa o toque virar um clique (abriria a edição do nome)
+  tdEnd(true);
+}, { passive: false });
+document.addEventListener('touchcancel', () => tdEnd(false));
+
+render();
+setStatus('saving');
+</script>
+</body>
+</html>

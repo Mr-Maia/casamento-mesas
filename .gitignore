@@ -1,0 +1,9 @@
+# segredos do /admin: nunca publicar (o repositório é público)
+admin.config.json
+firestore.rules
+public/admin.html
+.firebase/
+
+# lixo local
+.idea/
+firestore-debug.log
