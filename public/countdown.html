@@ -69,10 +69,16 @@
   h1 { font: 600 32px/1.1 var(--serif); margin: 0; letter-spacing: .01em; }
   h1 em { font-style: italic; color: var(--accent); font-weight: 500; }
   .eyebrow { margin: 6px 0 0; font-size: 11px; letter-spacing: .18em; text-transform: uppercase; color: var(--muted); }
-  .days {
-    margin: 30px 0 0; font: 600 clamp(88px, 26vw, 148px)/1 var(--serif);
+  .units { margin: 30px 0 0; display: flex; justify-content: center; align-items: flex-start; gap: 18px 36px; flex-wrap: wrap; }
+  .unit { min-width: 0; }
+  .num {
+    margin: 0; font: 600 clamp(72px, 20vw, 120px)/1 var(--serif);
     font-variant-numeric: lining-nums; color: var(--accent-deep);
   }
+  .unit .label { margin: 2px 0 0; font: italic 500 26px/1.2 var(--serif); color: var(--gold-deep); }
+  .sub { margin: 22px 0 0; font: italic 500 22px/1.2 var(--serif); color: var(--gold-deep); }
+  .total { margin: 6px 0 0; font-size: 13px; letter-spacing: .06em; color: var(--muted); }
+  .big { margin: 30px 0 0; font: 600 72px/1 var(--serif); color: var(--accent-deep); }
   .label { margin: 4px 0 0; font: italic 500 26px/1.2 var(--serif); color: var(--gold-deep); }
   .date { margin: 26px 0 0; font-size: 13px; letter-spacing: .06em; color: var(--muted); }
   .date b { color: var(--ink); font-weight: 600; }
@@ -97,22 +103,42 @@
 const WEDDING = { y: 2027, m: 5, d: 12 };
 const out = document.getElementById('out');
 
-function daysLeft() {
+const DAY = 864e5;
+const plural = (n, one, many) => `${n} ${n === 1 ? one : many}`;
+
+// Meses e dias de calendário entre hoje e o casamento (e o total de dias).
+function remaining() {
   const now = new Date();
-  const today = Date.UTC(now.getFullYear(), now.getMonth(), now.getDate());
-  return Math.round((Date.UTC(WEDDING.y, WEDDING.m, WEDDING.d) - today) / 864e5);
+  const y = now.getFullYear(), m = now.getMonth(), d = now.getDate();
+  const target = Date.UTC(WEDDING.y, WEDDING.m, WEDDING.d);
+  const total = Math.round((target - Date.UTC(y, m, d)) / DAY);
+  if (total <= 0) return { total };
+  let months = (WEDDING.y - y) * 12 + (WEDDING.m - m);
+  const anchor = n => {                       // hoje + n meses, sem passar do fim do mês
+    const last = new Date(Date.UTC(y, m + n + 1, 0)).getUTCDate();
+    return Date.UTC(y, m + n, Math.min(d, last));
+  };
+  if (anchor(months) > target) months--;
+  return { total, months, days: Math.round((target - anchor(months)) / DAY) };
 }
 
 function render() {
-  const n = daysLeft();
-  if (n > 0) {
-    out.innerHTML = `<p class="days">${n}</p><p class="label">${n === 1 ? 'dia' : 'dias'} para o grande dia</p>`;
-  } else if (n === 0) {
-    out.innerHTML = '<p class="days" style="font-size:72px">Hoje!</p><p class="label">É o dia do nosso casamento</p>';
+  const { total, months, days } = remaining();
+  if (total > 0) {
+    const unit = (n, one, many) => `<div class="unit"><p class="num">${n}</p><p class="label">${n === 1 ? one : many}</p></div>`;
+    out.innerHTML = '<div class="units">'
+      + (days || !months ? unit(days, 'dia', 'dias') : '')
+      + (months ? unit(months, 'mês', 'meses') : '')
+      + '</div><p class="sub">para o grande dia</p>'
+      + (months ? `<p class="total">${plural(total, 'dia', 'dias')} no total</p>` : '');
+    const parts = [(days || !months) && plural(days, 'dia', 'dias'), months && plural(months, 'mês', 'meses')];
+    document.title = `Faltam ${parts.filter(Boolean).join(' e ')} – Casamento`;
   } else {
-    out.innerHTML = '<p class="days" style="font-size:72px">&hearts;</p><p class="label">Já nos casámos</p>';
+    out.innerHTML = total === 0
+      ? '<p class="big">Hoje!</p><p class="label">É o dia do nosso casamento</p>'
+      : '<p class="big">&hearts;</p><p class="label">Já nos casámos</p>';
+    document.title = 'Casamento';
   }
-  document.title = n > 0 ? `Faltam ${n} ${n === 1 ? 'dia' : 'dias'} – Casamento` : 'Casamento';
 }
 
 render();
