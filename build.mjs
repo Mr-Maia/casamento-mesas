@@ -10,4 +10,5 @@ if (!src.includes(TOKEN)) throw new Error('src/app.html perdeu o marcador ' + TO
 fs.mkdirSync('public', { recursive: true });
 fs.writeFileSync('public/index.html', src.replace(TOKEN, 'null'));
 fs.writeFileSync('public/admin.html', src.replace(TOKEN, JSON.stringify({ path })));
-console.log('public/index.html (leitura) e public/admin.html (edição) gerados');
+fs.copyFileSync('src/countdown.html', 'public/countdown.html');
+console.log('public/index.html (leitura), public/admin.html (edição) e public/countdown.html gerados');

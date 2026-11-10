@@ -1,0 +1,123 @@
+<!doctype html>
+<html lang="pt-PT">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Casamento – Contagem decrescente</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #f7f1ea;
+    --card: #fffdf9;
+    --ink: #2f2528;
+    --muted: #8a7b7f;
+    --line: #ece2d9;
+    --accent: #2a7f79;
+    --accent-deep: #1f6560;
+    --gold: #c3a04a;
+    --gold-deep: #a8862f;
+    --gold-soft: #fbf4e1;
+    --pink: #d9729a;
+    --radius: 18px;
+    --shadow-lg: 0 2px 4px rgba(74, 52, 40, .06), 0 18px 40px -12px rgba(74, 52, 40, .22);
+    --serif: "Cormorant Garamond", Georgia, "Times New Roman", serif;
+    --sans: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  }
+  * { box-sizing: border-box; }
+  html, body { height: 100%; }
+  body {
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    color: var(--ink);
+    font: 14.5px/1.5 var(--sans);
+    background:
+      radial-gradient(1200px 600px at 0% -10%, rgba(217, 114, 154, .10), transparent 60%),
+      radial-gradient(1000px 600px at 100% 0%, rgba(42, 127, 121, .09), transparent 60%),
+      radial-gradient(900px 700px at 50% 120%, rgba(195, 160, 74, .12), transparent 60%),
+      var(--bg);
+    background-attachment: fixed;
+    -webkit-font-smoothing: antialiased;
+  }
+  nav { padding: 16px 22px; }
+  nav a {
+    display: inline-flex; align-items: center; gap: 6px;
+    color: var(--muted); text-decoration: none; font-size: 12px; font-weight: 500;
+    letter-spacing: .08em; text-transform: uppercase;
+  }
+  nav a:hover { color: var(--accent); }
+  main { flex: 1; display: grid; place-items: center; padding: 16px 16px 48px; }
+  .card {
+    width: min(560px, 100%); text-align: center;
+    background: var(--card); border: 1px solid var(--line); border-radius: var(--radius);
+    padding: 44px 28px 40px; box-shadow: var(--shadow-lg); position: relative;
+  }
+  .card::before {
+    content: ''; position: absolute; left: 0; right: 0; top: 0; height: 3px;
+    border-radius: var(--radius) var(--radius) 0 0;
+    background: linear-gradient(90deg, transparent, var(--accent) 20%, var(--gold) 50%, var(--pink) 80%, transparent);
+  }
+  .mono {
+    width: 52px; height: 52px; border-radius: 50%; margin: 0 auto 18px;
+    display: grid; place-items: center; color: var(--gold-deep);
+    background: radial-gradient(circle at 35% 30%, #fff, var(--gold-soft));
+    border: 1px solid var(--gold); box-shadow: 0 0 0 3px #fff, 0 0 0 4px rgba(195, 160, 74, .35);
+  }
+  h1 { font: 600 32px/1.1 var(--serif); margin: 0; letter-spacing: .01em; }
+  h1 em { font-style: italic; color: var(--accent); font-weight: 500; }
+  .eyebrow { margin: 6px 0 0; font-size: 11px; letter-spacing: .18em; text-transform: uppercase; color: var(--muted); }
+  .days {
+    margin: 30px 0 0; font: 600 clamp(88px, 26vw, 148px)/1 var(--serif);
+    font-variant-numeric: lining-nums; color: var(--accent-deep);
+  }
+  .label { margin: 4px 0 0; font: italic 500 26px/1.2 var(--serif); color: var(--gold-deep); }
+  .date { margin: 26px 0 0; font-size: 13px; letter-spacing: .06em; color: var(--muted); }
+  .date b { color: var(--ink); font-weight: 600; }
+</style>
+</head>
+<body>
+<nav><a href="./">&larr; Convidados &amp; mesas</a></nav>
+<main>
+  <section class="card" aria-live="polite">
+    <div class="mono" aria-hidden="true">
+      <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="14" r="5.5"/><circle cx="15" cy="14" r="5.5"/><path d="M10.5 4.5 12 3l1.5 1.5L12 6.5z"/></svg>
+    </div>
+    <h1>O nosso <em>Casamento</em></h1>
+    <p class="eyebrow">Contagem decrescente</p>
+    <div id="out"></div>
+    <p class="date"><b>12 de junho de 2027</b> · sábado</p>
+  </section>
+</main>
+<script>
+// Dia do casamento (mês 0-based). Conta dias de calendário no fuso do visitante,
+// por isso o número muda à meia-noite e não é afetado por mudanças de hora.
+const WEDDING = { y: 2027, m: 5, d: 12 };
+const out = document.getElementById('out');
+
+function daysLeft() {
+  const now = new Date();
+  const today = Date.UTC(now.getFullYear(), now.getMonth(), now.getDate());
+  return Math.round((Date.UTC(WEDDING.y, WEDDING.m, WEDDING.d) - today) / 864e5);
+}
+
+function render() {
+  const n = daysLeft();
+  if (n > 0) {
+    out.innerHTML = `<p class="days">${n}</p><p class="label">${n === 1 ? 'dia' : 'dias'} para o grande dia</p>`;
+  } else if (n === 0) {
+    out.innerHTML = '<p class="days" style="font-size:72px">Hoje!</p><p class="label">É o dia do nosso casamento</p>';
+  } else {
+    out.innerHTML = '<p class="days" style="font-size:72px">&hearts;</p><p class="label">Já nos casámos</p>';
+  }
+  document.title = n > 0 ? `Faltam ${n} ${n === 1 ? 'dia' : 'dias'} – Casamento` : 'Casamento';
+}
+
+render();
+// reavalia ao fim de cada minuto, para o número mudar sozinho à meia-noite
+setInterval(render, 60000);
+</script>
+</body>
+</html>
